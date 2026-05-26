@@ -1,0 +1,30 @@
+services:
+  postgresql:
+    build:
+      context: ../docker/postgresql
+      dockerfile: Dockerfile
+    container_name: postgresql
+    env_file:
+      - ../.env
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - ../docker/postgresql/files/ddl/:/docker-entrypoint-initdb.d/ddl/
+      - ../docker/postgresql/files/data/:/docker-entrypoint-initdb.d/data/
+      - ../docker/postgresql/files/usr/local/bin/entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
+      # var/lib/postgresql/data にマウントすると、docker-entrypoint.sh で初期化されるため、不要
+      - ../docker/postgresql/files/etc/postgresql/postgresql.conf:/etc/postgresql/postgresql.conf
+      # var/lib/postgresql/data にマウントすると、docker-entrypoint.sh で初期化されるため、不要
+      - ../docker/postgresql/files/etc/postgresql/pg_hba.conf:/etc/postgresql/pg_hba.conf
+      - postgresql_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    tty: true
+    stdin_open: true
+
+volumes:
+  postgresql_data:

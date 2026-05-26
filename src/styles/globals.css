@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  /* カスタムカラー (v3の colors.blue に相当) */
+  --color-blue-400: #2589FE;
+  --color-blue-500: #0070F3;
+  --color-blue-600: #2F6FEB;
+
+  /* カスタムグリッド列 (v3の gridTemplateColumns.13 に相当) */
+  --grid-template-columns-13: repeat(13, minmax(0, 1fr));
+
+  /* shimmerアニメーション (v3の keyframes.shimmer に相当) */
+  --animation-shimmer: shimmer 1s linear infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
