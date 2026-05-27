@@ -94,7 +94,7 @@ const ITEMS_PER_PAGE = 6
 export async function fetchRevenue(): Promise<Revenue[]> {
   try {
     console.log('Fetching revenue data...')
-    // await new Promise((resolve) => setTimeout(resolve, 3000))
+    await new Promise((resolve) => setTimeout(resolve, 3000))
 
     // SQL: SELECT * FROM revenue
     const data = await prisma.revenue.findMany()
