@@ -6,7 +6,7 @@
  *
  * 【Next.jsキャッチアップ】【Frontend】【API】【請求書クエリ】【関連】src/lib/prisma.ts : Prismaクライアントの実装
  */
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/lib/database/client';
 
 /**
  * 金額が666の請求書を顧客名付きで取得する
