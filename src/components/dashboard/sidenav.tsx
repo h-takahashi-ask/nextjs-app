@@ -2,7 +2,7 @@
  * 【Next.jsキャッチアップ】【Frontend】【Component】【サイドナビゲーション】【概要】ダッシュボード画面の左側に表示するナビゲーションバーUI部品
  * 【Next.jsキャッチアップ】【Frontend】【Component】【サイドナビゲーション】【概要】Acmeロゴ、ナビゲーションリンク、サインアウトボタンで構成する
  *
- * 【Next.jsキャッチアップ】【Frontend】【Component】【サイドナビゲーション】【関連】src/app/dashboard/layout.tsx          : 本コンポーネントを配置するダッシュボードレイアウト
+ * 【Next.jsキャッチアップ】【Frontend】【Component】【サイドナビゲーション】【関連】src/app/(site)/dashboard/layout.tsx   : 本コンポーネントを配置するダッシュボードレイアウト
  * 【Next.jsキャッチアップ】【Frontend】【Component】【サイドナビゲーション】【関連】src/components/dashboard/nav-links.tsx : ナビゲーションリンク一覧
  * 【Next.jsキャッチアップ】【Frontend】【Component】【サイドナビゲーション】【関連】src/components/common/acme-logo.tsx   : ロゴUI部品
  */
@@ -16,9 +16,9 @@ import { PowerIcon } from '@heroicons/react/24/outline';
  *
  * @remarks
  * モバイルでは画面上部に横並び、デスクトップ(md以上)では画面左に縦並びで表示する
- * 【Server Component】'use client'がないためサーバーコンポーネントとして動作し、クライアント側のページ遷移時に再レンダリングされない
- * 子のNavLinksはClient Componentなので、URLが変わるとNavLinksだけが再レンダリングされてハイライトを更新する
- * SideNav自身は再レンダリングされないため、ページ遷移をまたいでスクロール位置や表示状態が保たれる
+ * 'use client'がないためサーバー側で実行されるコンポーネントとして動作し、クライアント側のページ遷移時に再レンダリングされない
+ * 子の`NavLinks`はブラウザ上で動作するため、URLが変わると`NavLinks`だけが再レンダリングされてハイライトを更新する
+ * `SideNav`自身は再レンダリングされないため、ページ遷移をまたいでスクロール位置や表示状態が保たれる
  */
 export default function SideNav() {
   const sideNav = (

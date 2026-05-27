@@ -40,7 +40,6 @@ export default function HomePage() {
           </Link>
         </div>
         <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
-          {/* Add Hero Images Here */}
           {/* hero-desktop.png(デスクトップ) / hero-mobile.png(モバイル) の両画像に loading="eager" を指定 */}
           {/* 両画像はそれぞれの画面幅で最初に見える最大要素(LCP)のため、デフォルトの遅延読み込みを無効にして即時読み込みする */}
           <Image

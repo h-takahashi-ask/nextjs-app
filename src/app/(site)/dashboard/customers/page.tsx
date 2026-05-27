@@ -1,7 +1,7 @@
 /**
  * 【Next.jsキャッチアップ】【Frontend】【Page】【顧客一覧】【概要】顧客一覧ページ(URLパス: /dashboard/customers)を表示するページコンポーネント
  *
- * 【Next.jsキャッチアップ】【Frontend】【Page】【顧客一覧】【関連】src/app/dashboard/layout.tsx : 本ページを包むダッシュボードレイアウト
+ * 【Next.jsキャッチアップ】【Frontend】【Page】【顧客一覧】【関連】src/app/(site)/dashboard/layout.tsx : 本ページを包むダッシュボードレイアウト
  */
 
 /**

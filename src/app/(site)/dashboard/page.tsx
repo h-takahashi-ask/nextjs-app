@@ -1,7 +1,7 @@
 /**
  * 【Next.jsキャッチアップ】【Frontend】【Page】【ダッシュボード】【概要】ダッシュボードのトップページ(URLパス: /dashboard)を表示するページコンポーネント
  *
- * 【Next.jsキャッチアップ】【Frontend】【Page】【ダッシュボード】【関連】src/app/dashboard/layout.tsx : 本ページを包むダッシュボードレイアウト
+ * 【Next.jsキャッチアップ】【Frontend】【Page】【ダッシュボード】【関連】src/app/(site)/dashboard/layout.tsx : 本ページを包むダッシュボードレイアウト
  */
 
 /**

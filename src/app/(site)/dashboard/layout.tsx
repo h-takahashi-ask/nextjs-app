@@ -4,7 +4,7 @@
  * 【Next.jsキャッチアップ】【Frontend】【Layout】【ダッシュボード】【概要】ルートレイアウトの子として適用され、さらにその子に各ページのコンテンツが入る
  *
  * 【Next.jsキャッチアップ】【Frontend】【Layout】【ダッシュボード】【関連】src/app/layout.tsx         : 本レイアウトを包む親のルートレイアウト
- * 【Next.jsキャッチアップ】【Frontend】【Layout】【ダッシュボード】【関連】src/app/dashboard/page.tsx : /dashboardページのコンテンツ
+ * 【Next.jsキャッチアップ】【Frontend】【Layout】【ダッシュボード】【関連】src/app/(site)/dashboard/page.tsx : /dashboardページのコンテンツ
  */
 
 import SideNav from '@/components/dashboard/sidenav';

@@ -30,30 +30,24 @@ export default function NotFoundPage() {
       </div>
 
       <div className="px-6 text-center lg:px-8">
-        {/* エラーコードラベル */}
         <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-500">
           Error
         </p>
 
-        {/* 404 メインビジュアル */}
         <p className="mt-2 text-[9rem] font-black leading-none tracking-tight text-gray-900 sm:text-[14rem]">
           404
         </p>
 
-        {/* アクセントライン */}
         <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-blue-500" />
 
-        {/* ページタイトル */}
         <h1 className="mt-6 text-2xl font-bold tracking-tight text-gray-800 sm:text-3xl">
           Page Not Found
         </h1>
 
-        {/* 説明文 */}
         <p className="mt-3 text-base leading-7 text-gray-500">
           The page you&apos;re looking for doesn&apos;t exist or has been moved.
         </p>
 
-        {/* ホームへ戻るCTAボタン */}
         <div className="mt-10">
           <Link
             href="/"
