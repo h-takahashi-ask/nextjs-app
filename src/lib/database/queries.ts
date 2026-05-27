@@ -75,7 +75,7 @@ import { formatCurrency } from '@/lib/utils'
 //   DBカラム名 (snake_case) とPrismaフィールド名 (camelCase) が対応している
 //   例: image_url → imageUrl、customer_id → customerId
 //   スキーマの @map("image_url") で対応が定義されており、Prismaが自動で変換する
-//   取得結果の変数もcamelCaseになるため、definitions.tsの snake_case 型への変換が必要
+//   取得結果の変数もcamelCaseになるため、models.tsやtypes.tsで定義したsnake_case型への変換が必要
 //
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -113,6 +113,10 @@ export async function fetchRevenue(): Promise<Revenue[]> {
  * @returns 金額を通貨フォーマット済みの最新請求書5件 (日付降順)
  */
 export async function fetchLatestInvoices(): Promise<LatestInvoice[]> {
+  
+  console.log('Fetching latest invoices data...')
+  await new Promise((resolve) => setTimeout(resolve, 2000))
+
   try {
     const invoices = await prisma.invoice.findMany({
       // SQL: ORDER BY date DESC
@@ -163,6 +167,8 @@ export async function fetchLatestInvoices(): Promise<LatestInvoice[]> {
  * paid / pendingをそれぞれ個別のaggregateクエリで集計することで条件付き合計を実現する
  */
 export async function fetchCardData() {
+  console.log('Fetching card data...')
+  await new Promise((resolve) => setTimeout(resolve, 1000))
   try {
     const [numberOfInvoices, numberOfCustomers, paidSummary, pendingSummary] =
       await Promise.all([

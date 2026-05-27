@@ -1,35 +1,43 @@
+/**
+ * 【Next.jsキャッチアップ】【Frontend】【Component】【売上グラフ】【概要】過去12ヶ月の月別売上データを棒グラフで表示するダッシュボードコンポーネント
+ *
+ * 【Next.jsキャッチアップ】【Frontend】【Component】【売上グラフ】【関連】src/lib/database/queries.ts                     : fetchRevenueでデータ取得
+ * 【Next.jsキャッチアップ】【Frontend】【Component】【売上グラフ】【関連】src/lib/utils.ts                                 : generateYAxisでY軸ラベルを生成
+ * 【Next.jsキャッチアップ】【Frontend】【Component】【売上グラフ】【関連】src/app/(site)/dashboard/(overview)/page.tsx    : SuspenseでラップしてRevenueChartSkeletonをfallbackに指定
+ * 【Next.jsキャッチアップ】【Frontend】【Component】【売上グラフ】【関連】src/components/common/skeletons.tsx             : RevenueChartSkeletonがSuspense中に表示される
+ *
+ * @remarks
+ * 本コンポーネントはCSSのみで実装した簡易グラフ。本格的なグラフライブラリを使う場合は以下を参照:
+ * https://www.tremor.so/ / https://www.chartjs.org/ / https://airbnb.io/visx/
+ */
 import { generateYAxis } from '@/lib/utils';
 import { CalendarIcon } from '@heroicons/react/24/outline';
 import { lusitana } from '@/components/common/fonts';
-import { Revenue } from '@/lib/database/models';
+import { fetchRevenue } from '@/lib/database/queries';
 
-// This component is representational only.
-// For data visualization UI, check out:
-// https://www.tremor.so/
-// https://www.chartjs.org/
-// https://airbnb.io/visx/
-
-export default async function RevenueChart({
-  revenue,
-}: {
-  revenue: Revenue[];
-}) {
-  const chartHeight = 350;
-  // NOTE: Uncomment this code in Chapter 7
-
-  const { yAxisLabels, topLabel } = generateYAxis(revenue);
+/**
+ * 月別売上棒グラフを構築するサーバーコンポーネント
+ *
+ * @remarks
+ * 'use client'がないためサーバー側で実行されるコンポーネントとして動作し、fetchRevenue()でDBから直接データを取得する
+ * page.tsxのSuspense内に置かれており、このコンポーネントが解決するまでRevenueChartSkeletonが表示される
+ */
+export default async function RevenueChart() {
+  const revenue = await fetchRevenue();
 
   if (!revenue || revenue.length === 0) {
-    return <p className="mt-4 text-gray-400">No data available.</p>;
+    const noData = <p className="mt-4 text-gray-400">No data available.</p>;
+    return noData;
   }
 
-  return (
+  const chartHeight = 350;
+  const { yAxisLabels, topLabel } = generateYAxis(revenue);
+
+  const revenueChart = (
     <div className="w-full md:col-span-4">
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
         Recent Revenue
       </h2>
-      {/* NOTE: Uncomment this code in Chapter 7 */}
-
       <div className="rounded-xl bg-gray-50 p-4">
         <div className="sm:grid-cols-13 mt-0 grid grid-cols-12 items-end gap-2 rounded-md bg-white p-4 md:gap-4">
           <div
@@ -62,4 +70,5 @@ export default async function RevenueChart({
       </div>
     </div>
   );
+  return revenueChart;
 }
