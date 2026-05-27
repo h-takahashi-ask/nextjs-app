@@ -36,7 +36,7 @@ const links = [
  */
 export default function NavLinks() {
   const pathname = usePathname();
-  return (
+  const navLinks = (
     <>
       {links.map((link) => {
         const LinkIcon = link.icon;
@@ -55,7 +55,7 @@ export default function NavLinks() {
         //   1. 下の return ( <Link 〜 </Link> ); を /* */ で囲んでコメントアウト
         //   2. 下の /* <a>版 */ ブロックのコメントを外す
         // ─────────────────────────────────────────────────────────────────────────────
-        return (
+        const linkElement = (
           <Link
             key={link.name}
             href={link.href}
@@ -70,6 +70,7 @@ export default function NavLinks() {
             <p className="hidden md:block">{link.name}</p>
           </Link>
         );
+        return linkElement;
         /* ── <a>タグ版 (上の return(...)をコメントアウトしてから下のコメントを外す) ────
         // return (
         //   <a
@@ -90,4 +91,5 @@ export default function NavLinks() {
       })}
     </>
   );
+  return navLinks;
 }

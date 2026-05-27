@@ -12,5 +12,6 @@
  * /dashboardにアクセスした際にこのコンポーネントの内容がlayout.tsxのchildren位置に差し込まれる
  */
 export default function DashboardPage() {
-  return <p>Dashboard Page</p>;
+  const page = <p>Dashboard Page</p>;
+  return page;
 }

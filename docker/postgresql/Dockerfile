@@ -25,8 +25,6 @@ RUN mkdir -p "$PGDATA" /docker-entrypoint-initdb.d \
 
 COPY files/etc/postgresql/postgresql.conf /etc/postgresql/postgresql.conf
 COPY files/etc/postgresql/pg_hba.conf /etc/postgresql/pg_hba.conf
-COPY files/ddl/ /docker-entrypoint-initdb.d/ddl/
-COPY files/data/ /docker-entrypoint-initdb.d/data/
 COPY files/usr/local/bin/entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 

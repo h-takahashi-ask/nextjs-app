@@ -22,5 +22,6 @@ export default async function BlogPostPage({
     params: Promise<{ slug: string }>
 }) {
     const { slug } = await params
-    return <div>My Post: {slug}</div>
+    const page = <div>My Post: {slug}</div>;
+    return page;
 }

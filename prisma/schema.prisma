@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// アプリケーションユーザー
+model User {
+  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid   // PK: ユーザーID（UUID）
+  name     String @db.VarChar(255)                                          // ユーザー名
+  email    String @unique                                                   // メールアドレス（一意制約）
+  password String                                                           // ハッシュ化済みパスワード
+
+  @@map("users")
+}
+
+// 請求先顧客
+model Customer {
+  id       String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid // PK: 顧客ID（UUID）
+  name     String    @db.VarChar(255)                                        // 顧客名
+  email    String    @db.VarChar(255)                                        // メールアドレス
+  imageUrl String    @map("image_url") @db.VarChar(255)                      // プロフィール画像URL
+  invoices Invoice[]                                                         // リレーション: 1顧客 → 複数請求書
+
+  @@map("customers")
+}
+
+// 請求書
+model Invoice {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid // PK: 請求書ID（UUID）
+  customerId String   @map("customer_id") @db.Uuid                            // FK: customers.id
+  amount     Int                                                              // 請求金額（セント単位）
+  status     String   @db.VarChar(255)                                        // 支払いステータス（pending / paid）
+  date       DateTime @db.Date                                                // 請求日
+  customer   Customer @relation(fields: [customerId], references: [id])       // リレーション: Invoice → Customer
+
+  @@map("invoices")
+}
+
+// 月次売上
+model Revenue {
+  month   String @id @db.VarChar(4) // PK: 対象月（例: Jan, Feb ...）
+  revenue Int                       // 売上金額（セント単位）
+
+  @@map("revenue")
+}

@@ -23,7 +23,7 @@ import SideNav from '@/components/dashboard/sidenav';
  * <a>タグに変えるとフルページリロードになりlayoutも含めてすべて作り直しになる
  */
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  return (
+  const layout = (
     <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
       {/* h-screenで画面全体を占有 / md:overflow-hiddenでブラウザ本体のスクロールを封じる */}
       {/* サイドナビを固定したままコンテンツエリアのみをスクロールさせるための外側レイアウト設定 */}
@@ -38,4 +38,5 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <div className="grow p-6 md:overflow-y-auto md:p-12">{children}</div>
     </div>
   );
+  return layout;
 }

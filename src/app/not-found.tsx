@@ -20,7 +20,7 @@ export const metadata: Metadata = {
  * コード内でnotFound()関数を呼び出した場合にも同じページが表示される
  */
 export default function NotFoundPage() {
-  return (
+  const page = (
     <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gray-50">
       {/* 背景装飾: ページに奥行きを出すぼかしグラデーション */}
       {/* aria-hiddenでスクリーンリーダーからは非表示にしてアクセシビリティを保つ */}
@@ -64,5 +64,6 @@ export default function NotFoundPage() {
         </div>
       </div>
     </main>
-  )
+  );
+  return page;
 }

@@ -9,8 +9,6 @@ services:
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
-      - ../docker/postgresql/files/ddl/:/docker-entrypoint-initdb.d/ddl/
-      - ../docker/postgresql/files/data/:/docker-entrypoint-initdb.d/data/
       - ../docker/postgresql/files/usr/local/bin/entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
       # var/lib/postgresql/data にマウントすると、docker-entrypoint.sh で初期化されるため、不要
       - ../docker/postgresql/files/etc/postgresql/postgresql.conf:/etc/postgresql/postgresql.conf

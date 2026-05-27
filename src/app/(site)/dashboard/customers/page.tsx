@@ -12,5 +12,6 @@
  * /dashboard/customersにアクセスした際にこのコンポーネントの内容がlayout.tsxのchildren位置に差し込まれる
  */
 export default function DashboardCustomersPage() {
-  return <p>Dashboard Customers Page</p>;
+  const page = <p>Dashboard Customers Page</p>;
+  return page;
 }

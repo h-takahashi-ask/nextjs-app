@@ -12,7 +12,7 @@ import { lusitana } from '@/components/common/fonts';
  * GlobeAltIconとAcme文字列を横並びに配置するロゴUI部品
  */
 export default function AcmeLogo() {
-  return (
+  const logo = (
     <div
       className={`${lusitana.className} flex flex-row items-center leading-none text-white`}
     >
@@ -22,4 +22,5 @@ export default function AcmeLogo() {
       <p className="text-[44px]">Acme</p>
     </div>
   );
+  return logo;
 }

@@ -18,7 +18,7 @@ import { lusitana } from '@/components/common/fonts';
  * RootLayoutのchildren位置に差し込まれる
  */
 export default function HomePage() {
-  return (
+  const page = (
     <main className="flex min-h-screen flex-col p-6">
       <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-52">
         <AcmeLogo />
@@ -63,4 +63,5 @@ export default function HomePage() {
       </div>
     </main>
   );
+  return page;
 }

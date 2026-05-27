@@ -12,5 +12,6 @@
  * /dashboard/invoicesにアクセスした際にこのコンポーネントの内容がlayout.tsxのchildren位置に差し込まれる
  */
 export default function DashboardInvoicesPage() {
-  return <p>Dashboard Invoices Page</p>;
+  const page = <p>Dashboard Invoices Page</p>;
+  return page;
 }

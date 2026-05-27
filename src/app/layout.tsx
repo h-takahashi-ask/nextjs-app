@@ -46,7 +46,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
+  const layout = (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
@@ -56,4 +56,5 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
+  return layout;
 }
