@@ -34,7 +34,6 @@ const FormSchema = z.object({
   date: z.date(),
 });
 
-
 /**
  * 新規請求書をDBに保存するServer Action
  *
@@ -46,18 +45,31 @@ const FormSchema = z.object({
  *
  * 処理完了後は revalidatePath で請求書一覧ページのキャッシュを破棄し、
  * redirect で一覧ページに戻す
+ *
+ * 【redirect() を try の外に置く理由】
+ * Next.js の redirect() は内部でエラーをスローして動作する特殊な関数
+ * try ブロックの中に置くと catch がそのエラーを捕まえてしまい、リダイレクトが無効になる
+ * そのため DB 操作だけを try でラップし、redirect() は try の外で呼ぶ
  */
 export async function createInvoice(formData: FormData) {
-
   // フォームから受け取るフィールドのみに絞ったスキーマ(id・dateはサーバー生成のため除外)
   const CreateInvoice = FormSchema.omit({ id: true, date: true });
 
-  // フォームデータを取り出してバリデーション。失敗時は ZodError がスローされる
-  const { customerId, amount, status } = CreateInvoice.parse({
+  // safeParse: バリデーション失敗時に例外をスローせず { success, data, error } を返す
+  // parse() は ZodError をスローするため try/catch が必要だが、
+  // safeParse() は戻り値で成否を判断できるため if 文だけで扱える
+  const parsed = CreateInvoice.safeParse({
     customerId: formData.get('customerId'),
     amount: formData.get('amount'),
     status: formData.get('status'),
   });
+  if (!parsed.success) {
+    // parsed.error.flatten() でフィールドごとのエラーメッセージを取り出せる
+    // parsed.error.issues: Zod v4 の推奨形式。path(フィールド名)とmessage(エラー内容)の配列
+    console.error('Validation error (createInvoice):', parsed.error.issues);
+    throw new Error('入力値が不正です');
+  }
+  const { customerId, amount, status } = parsed.data;
 
   // DBには金額をセント単位(整数)で保存する
   // Math.round: 浮動小数点誤差を防ぐ(例: 1.01 * 100 = 101.00000000000001 → 101)
@@ -66,20 +78,20 @@ export async function createInvoice(formData: FormData) {
   // 請求日は現在日時をサーバー側で生成する(フォームからは受け取らない)
   const date = new Date();
 
-  const invoice = {
-    data: {
-      customerId,
-      amount: amountInCents,
-      status,
-      // date はサーバーで生成するため常に omit する。DBの型(DateTime)に合わせて z.date() を使う
-      date,
-    },
-  };
-  await prisma.invoice.create(invoice);
+  // DB操作のみを try/catch でラップする
+  try {
+    const invoice = {
+      data: { customerId, amount: amountInCents, status, date },
+    };
+    await prisma.invoice.create(invoice);
+  } catch (error) {
+    // DB接続エラー・制約違反など、Prismaが投げるエラーをここで捕捉する
+    console.error('Database error (createInvoice):', error);
+    throw new Error('請求書の作成に失敗しました');
+  }
 
-  // キャッシュ破棄: 静的にキャッシュされた請求書一覧ページを無効化して最新データを表示させる
+  // redirect() は try の外で呼ぶ。理由は関数の @remarks を参照
   revalidatePath(redirectUrl);
-  // 作成完了後は請求書一覧ページにリダイレクトする
   redirect(redirectUrl);
 }
 
@@ -93,40 +105,51 @@ export async function createInvoice(formData: FormData) {
  * @remarks
  * `create` と異なり `date` は更新しない(作成日は変えないため)
  * Prismaの `update` は `where` で更新対象を特定する必要がある点が `create` との違い
+ *
+ * redirect() を try の外に置く理由は createInvoice の @remarks を参照
  */
 export async function updateInvoice(id: string, formData: FormData) {
   // 更新では id・date ともにフォームから受け取らないため両方 omit する
   // date を omit することで作成日がそのまま保持される
   const UpdateInvoice = FormSchema.omit({ id: true, date: true });
 
-  // フォームデータを取り出してバリデーション。失敗時は ZodError がスローされる
-  const { customerId, amount, status } = UpdateInvoice.parse({
+  const parsed = UpdateInvoice.safeParse({
     customerId: formData.get('customerId'),
     amount: formData.get('amount'),
     status: formData.get('status'),
   });
+  if (!parsed.success) {
+    // parsed.error.issues: Zod v4 の推奨形式。path(フィールド名)とmessage(エラー内容)の配列
+    console.error('Validation error (updateInvoice):', parsed.error.issues);
+    throw new Error('入力値が不正です');
+  }
+  const { customerId, amount, status } = parsed.data;
 
   // Math.round: 浮動小数点誤差を防ぐ(例: 1.01 * 100 = 101.00000000000001 → 101)
   const amountInCents = Math.round(amount * 100);
 
-  const invoice = {
-    // where: 更新対象のレコードをIDで特定する。createにはwhereは不要だがupdateでは必須
-    where: { id },
-    data: {
-      customerId,
-      amount: amountInCents,
-      status,
-      // date は意図的に含めない。作成日を上書きせず、最初に保存した日付を維持する
-    },
-  };
-  await prisma.invoice.update(invoice);
+  // DB操作のみを try/catch でラップする
+  try {
+    const invoice = {
+      // where: 更新対象のレコードをIDで特定する。createにはwhereは不要だがupdateでは必須
+      where: { id },
+      data: {
+        customerId,
+        amount: amountInCents,
+        status,
+        // date は意図的に含めない。作成日を上書きせず、最初に保存した日付を維持する
+      },
+    };
+    await prisma.invoice.update(invoice);
+  } catch (error) {
+    console.error('Database error (updateInvoice):', error);
+    throw new Error('請求書の更新に失敗しました');
+  }
 
-  // キャッシュ破棄: 更新後の一覧ページを最新状態で表示するためキャッシュを無効化する
+  // redirect() は try の外で呼ぶ。理由は createInvoice の @remarks を参照
   revalidatePath(redirectUrl);
-  // 更新完了後は請求書一覧ページにリダイレクトする
   redirect(redirectUrl);
 }
-
 
 /**
  * 請求書をDBから削除するServer Action
@@ -138,11 +161,20 @@ export async function updateInvoice(id: string, formData: FormData) {
  * redirect は不要。削除ボタンは一覧ページ上にあるため、現在のページに留まる
  */
 export async function deleteInvoice(id: string) {
-  // 変数名を query にしているのは、関数名 deleteInvoice と同名にするとシャドウイングになるため
-  const query = {
-    where: { id },
-  };
-  await prisma.invoice.delete(query);
+  
+  // TODO: error.tsx(エラー境界)の動作確認用。確認後は削除する
+  // throw new Error('Failed to Delete Invoice');
+
+  // DB操作のみを try/catch でラップする
+  try {
+    // 変数名を query にしているのは、関数名 deleteInvoice と同名にするとシャドウイングになるため
+    const query = { where: { id } };
+    await prisma.invoice.delete(query);
+  } catch (error) {
+    console.error('Database error (deleteInvoice):', error);
+    throw new Error('請求書の削除に失敗しました');
+  }
+
   // キャッシュ破棄: 削除後の一覧ページを最新状態で表示するためキャッシュを無効化する
   revalidatePath(redirectUrl);
 }
