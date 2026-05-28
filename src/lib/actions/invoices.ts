@@ -18,6 +18,18 @@ import { prisma } from '@/lib/database/client';
 const redirectUrl = '/dashboard/invoices';
 
 /**
+ * Server Action がフォームに返すバリデーション結果の型
+ *
+ * @remarks
+ * errors のキーは Zod の issue.path[0] から動的に生成されるため Record<string, string[]> で受ける
+ * フォーム側では state.errors?.customerId のように任意のフィールド名でアクセスできる
+ */
+export type State = {
+  errors?: Record<string, string[]>;
+  message?: string | null;
+};
+
+/**
  * フォーム送信値のバリデーションスキーマ(Invoice モデル全体の形を定義)
  *
  * @remarks
@@ -26,10 +38,17 @@ const redirectUrl = '/dashboard/invoices';
  */
 const FormSchema = z.object({
   id: z.string(),
-  customerId: z.string(),
+  // Zod v4 では invalid_type_error が廃止され error に統一された
+  customerId: z.string({
+    error: '顧客を選択してください',
+  }),
   // gt(0): 0以下の金額は無効。フォームの number input は文字列で届くため coerce で数値に変換する
-  amount: z.coerce.number().gt(0, { message: '金額は0より大きい値を入力してください' }),
-  status: z.enum(['pending', 'paid']),
+  amount: z.coerce.number().gt(0, { 
+    message: '金額は0より大きい値を入力してください' 
+  }),
+  status: z.enum(['pending', 'paid'], {
+    error: 'ステータスを選択してください',
+  }),
   // date はサーバーで生成するため常に omit する。DBの型(DateTime)に合わせて z.date() を使う
   date: z.date(),
 });
@@ -37,7 +56,9 @@ const FormSchema = z.object({
 /**
  * 新規請求書をDBに保存するServer Action
  *
- * @param formData - HTMLフォームの送信データ。name属性をキーとして各フィールドの値が含まれる
+ * @param prevState - useActionState が管理する直前の状態。この引数は必須だが関数内では使わない
+ *                    useActionState の仕様上、第1引数に必ず前の state が渡される
+ * @param formData  - HTMLフォームの送信データ。name属性をキーとして各フィールドの値が含まれる
  *
  * @remarks
  * Server Actionはサーバーで実行されるため、フォームの action={createInvoice} に渡すだけで
@@ -51,25 +72,36 @@ const FormSchema = z.object({
  * try ブロックの中に置くと catch がそのエラーを捕まえてしまい、リダイレクトが無効になる
  * そのため DB 操作だけを try でラップし、redirect() は try の外で呼ぶ
  */
-export async function createInvoice(formData: FormData) {
+export async function createInvoice(prevState: State, formData: FormData) {
   // フォームから受け取るフィールドのみに絞ったスキーマ(id・dateはサーバー生成のため除外)
   const CreateInvoice = FormSchema.omit({ id: true, date: true });
 
   // safeParse: バリデーション失敗時に例外をスローせず { success, data, error } を返す
   // parse() は ZodError をスローするため try/catch が必要だが、
   // safeParse() は戻り値で成否を判断できるため if 文だけで扱える
-  const parsed = CreateInvoice.safeParse({
+  const validatedFields  = CreateInvoice.safeParse({
     customerId: formData.get('customerId'),
     amount: formData.get('amount'),
     status: formData.get('status'),
   });
-  if (!parsed.success) {
-    // parsed.error.flatten() でフィールドごとのエラーメッセージを取り出せる
-    // parsed.error.issues: Zod v4 の推奨形式。path(フィールド名)とmessage(エラー内容)の配列
-    console.error('Validation error (createInvoice):', parsed.error.issues);
-    throw new Error('入力値が不正です');
+  if (!validatedFields.success) {
+    // issues をフィールド名をキーにした文字列配列オブジェクトに変換する
+    // flatten() は Zod v4 で非推奨のため、issues を直接 reduce して同等の形式を作る
+    // 例: [{ path: ['amount'], message: '...' }] → { amount: ['...'] }
+    const fieldErrors = validatedFields.error.issues.reduce<Record<string, string[]>>(
+      (acc, issue) => {
+        const key = String(issue.path[0]);
+        acc[key] = [...(acc[key] ?? []), issue.message];
+        return acc;
+      },
+      {},
+    );
+    return {
+      errors: fieldErrors,
+      message: 'Missing Fields. Failed to Create Invoice.',
+    };
   }
-  const { customerId, amount, status } = parsed.data;
+  const { customerId, amount, status } = validatedFields.data;
 
   // DBには金額をセント単位(整数)で保存する
   // Math.round: 浮動小数点誤差を防ぐ(例: 1.01 * 100 = 101.00000000000001 → 101)
@@ -98,9 +130,10 @@ export async function createInvoice(formData: FormData) {
 /**
  * 既存請求書をDBで更新するServer Action
  *
- * @param id       - 更新対象の請求書ID。URLの動的セグメント `/invoices/[id]/edit` から取り出した値を
- *                   edit-form.tsx 側で `bind(null, invoice.id)` によって第1引数に自動注入する
- * @param formData - HTMLフォームの送信データ
+ * @param id        - 更新対象の請求書ID。URLの動的セグメント `/invoices/[id]/edit` から取り出した値を
+ *                    edit-form.tsx 側で `bind(null, invoice.id)` によって第1引数に自動注入する
+ * @param prevState - useActionState が管理する直前の状態(createInvoice と同様、関数内では未使用)
+ * @param formData  - HTMLフォームの送信データ
  *
  * @remarks
  * `create` と異なり `date` は更新しない(作成日は変えないため)
@@ -108,22 +141,36 @@ export async function createInvoice(formData: FormData) {
  *
  * redirect() を try の外に置く理由は createInvoice の @remarks を参照
  */
-export async function updateInvoice(id: string, formData: FormData) {
+export async function updateInvoice(
+  id: string,
+  prevState: State,
+  formData: FormData,
+){
   // 更新では id・date ともにフォームから受け取らないため両方 omit する
   // date を omit することで作成日がそのまま保持される
   const UpdateInvoice = FormSchema.omit({ id: true, date: true });
 
-  const parsed = UpdateInvoice.safeParse({
+  const validatedFields = UpdateInvoice.safeParse({
     customerId: formData.get('customerId'),
     amount: formData.get('amount'),
     status: formData.get('status'),
   });
-  if (!parsed.success) {
-    // parsed.error.issues: Zod v4 の推奨形式。path(フィールド名)とmessage(エラー内容)の配列
-    console.error('Validation error (updateInvoice):', parsed.error.issues);
-    throw new Error('入力値が不正です');
+  
+  if (!validatedFields.success) {
+    const fieldErrors = validatedFields.error.issues.reduce<Record<string, string[]>>(
+      (acc, issue) => {
+        const key = String(issue.path[0]);
+        acc[key] = [...(acc[key] ?? []), issue.message];
+        return acc;
+      },
+      {},
+    );
+    return {
+      errors: fieldErrors,
+      message: 'Missing Fields. Failed to Update Invoice.',
+    };
   }
-  const { customerId, amount, status } = parsed.data;
+  const { customerId, amount, status } = validatedFields.data;
 
   // Math.round: 浮動小数点誤差を防ぐ(例: 1.01 * 100 = 101.00000000000001 → 101)
   const amountInCents = Math.round(amount * 100);
