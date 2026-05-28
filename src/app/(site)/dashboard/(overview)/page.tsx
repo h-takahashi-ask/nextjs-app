@@ -11,7 +11,7 @@ import { Suspense } from 'react';
 import CardWrapper from '@/components/dashboard/cards';
 import RevenueChart from '@/components/dashboard/revenue-chart';
 import LatestInvoices from '@/components/dashboard/latest-invoices';
-import { lusitana } from '@/components/common/fonts';
+import DashboardShell from '@/components/dashboard/dashboard-shell';
 import {
   RevenueChartSkeleton,
   LatestInvoicesSkeleton,
@@ -33,10 +33,7 @@ import {
  */
 export default async function Page() {
   const page = (
-    <main>
-      <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
-        Dashboard
-      </h1>
+    <DashboardShell>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {/* CardWrapperが内部でfetchCardDataを呼ぶ。取得中はCardsSkeleton(4枚のカードプレースホルダー)を表示する */}
         <Suspense fallback={<CardsSkeleton />}>
@@ -53,7 +50,7 @@ export default async function Page() {
           <LatestInvoices />
         </Suspense>
       </div>
-    </main>
+    </DashboardShell>
   );
   return page;
 }
