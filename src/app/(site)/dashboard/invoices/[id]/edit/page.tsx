@@ -2,13 +2,13 @@
  * 【Next.jsキャッチアップ】【Frontend】【Page】【請求書編集】【概要】既存請求書を編集するページ(URLパス: /dashboard/invoices/[id]/edit)
  * 【Next.jsキャッチアップ】【Frontend】【Page】【請求書編集】【概要】URLの[id]で対象請求書を特定し、現在の値をフォームに初期表示する
  *
- * 【Next.jsキャッチアップ】【Frontend】【Page】【請求書編集】【関連】src/components/invoices/edit-form.tsx : 請求書編集フォーム
- * 【Next.jsキャッチアップ】【Frontend】【Page】【請求書編集】【関連】src/components/invoices/breadcrumbs.tsx : パンくずナビ
+ * 【Next.jsキャッチアップ】【Frontend】【Page】【請求書編集】【関連】src/components/dashboard/invoices/edit-form.tsx : 請求書編集フォーム
+ * 【Next.jsキャッチアップ】【Frontend】【Page】【請求書編集】【関連】src/components/dashboard/invoices/breadcrumbs.tsx : パンくずナビ
  * 【Next.jsキャッチアップ】【Frontend】【Page】【請求書編集】【関連】src/lib/actions/invoices.ts : updateInvoice Server Action
  */
 
-import Form from '@/components/invoices/edit-form';
-import Breadcrumbs from '@/components/invoices/breadcrumbs';
+import Form from '@/components/dashboard/invoices/edit-form';
+import Breadcrumbs from '@/components/dashboard/invoices/breadcrumbs';
 import { fetchInvoiceById, fetchCustomers } from '@/lib/database/queries';
 import { notFound } from 'next/navigation';
 

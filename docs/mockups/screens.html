@@ -796,6 +796,64 @@
     .tag-read  { display:inline-block; background:#dbeafe; color:#1e40af; border-radius:4px; padding:1px 5px; font-size:10px; font-weight:700; }
     .tag-none  { color: #d1d5db; font-size:11px; }
 
+    /* ===== スイムレーン図解 ===== */
+    .swimlane {
+      display: grid;
+      grid-template-columns: 1fr 56px 1fr;
+      gap: 0;
+      margin-bottom: 24px;
+      font-size: 12px;
+    }
+    .swimlane-col-header {
+      padding: 8px 12px;
+      font-weight: 800;
+      font-size: 12px;
+      border-radius: 8px 8px 0 0;
+      text-align: center;
+    }
+    .swimlane-server .swimlane-col-header { background: #dbeafe; color: #1e40af; }
+    .swimlane-browser .swimlane-col-header { background: #dcfce7; color: #166534; }
+    .swimlane-center { display: flex; flex-direction: column; align-items: center; background: #f8fafc; }
+    .swimlane-server { background: #eff6ff; border: 1.5px solid #93c5fd; border-radius: 8px 0 0 8px; }
+    .swimlane-browser { background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 0 8px 8px 0; }
+    .swim-step {
+      padding: 8px 12px;
+      border-bottom: 1px dashed #e2e8f0;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .swim-step:last-child { border-bottom: none; }
+    .swim-step .step-num {
+      font-size: 10px;
+      font-weight: 800;
+      background: #1e3a5f;
+      color: #fff;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .swim-arrow {
+      border-bottom: 1px dashed #e2e8f0;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #64748b;
+      width: 100%;
+    }
+    .swim-tag-sc  { background: #dbeafe; color: #1e40af; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 4px; white-space: nowrap; }
+    .swim-tag-cc  { background: #ffedd5; color: #c2410c; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 4px; white-space: nowrap; }
+    .swim-tag-net { background: #e0f2fe; color: #0369a1; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 4px; white-space: nowrap; }
+    .swim-empty { min-height: 52px; border-bottom: 1px dashed #e2e8f0; }
+    .swim-empty:last-child { border-bottom: none; }
+
     /* ===== アコーディオン目次 ===== */
     .toc {
       background: #fff;
@@ -944,14 +1002,16 @@
             <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-dir">(overview)/</span><br>
             <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── </span><span class="tree-page">page.tsx</span><span class="tree-note">/dashboard</span><br>
             <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── </span><span class="tree-loading">loading.tsx</span><span class="tree-note">ページ全体ローディング</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;└── </span><span class="tree-dir">invoices/</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-page">page.tsx</span><span class="tree-note">/dashboard/invoices</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-error">error.tsx</span><span class="tree-note">invoices配下のエラー境界 [CC]</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-dir">create/</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── </span><span class="tree-page">page.tsx</span><span class="tree-note">/dashboard/invoices/create</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── </span><span class="tree-dir">[id]/edit/</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-page">page.tsx</span><span class="tree-note">/dashboard/invoices/[id]/edit</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── </span><span class="tree-notfound">not-found.tsx</span><span class="tree-note">notFound() で表示</span>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-dir">invoices/</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── </span><span class="tree-page">page.tsx</span><span class="tree-note">/dashboard/invoices</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── </span><span class="tree-error">error.tsx</span><span class="tree-note">invoices配下のエラー境界 [CC]</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── </span><span class="tree-dir">create/</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── </span><span class="tree-page">page.tsx</span><span class="tree-note">/dashboard/invoices/create</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── </span><span class="tree-dir">[id]/edit/</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-page">page.tsx</span><span class="tree-note">/dashboard/invoices/[id]/edit</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── </span><span class="tree-notfound">not-found.tsx</span><span class="tree-note">notFound() で表示</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;└── </span><span class="tree-dir">customers/</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── </span><span class="tree-page">page.tsx</span><span class="tree-note">/dashboard/customers</span>
           </div>
         </div>
       </div>
@@ -1227,6 +1287,178 @@
     </div>
     <div class="ref-body">
 
+      <!-- リクエスト〜表示の流れ 図解 -->
+      <p style="font-size:13px; font-weight:800; color:#1e293b; margin:0 0 12px;">
+        リクエストから表示まで — SC と CC の実行タイミング
+      </p>
+      <div class="swimlane">
+        <!-- ヘッダー行 -->
+        <div class="swimlane-server">
+          <div class="swimlane-col-header">🖥️ サーバー</div>
+
+          <!-- ① Route解決 -->
+          <div class="swim-step">
+            <span class="step-num">1</span>
+            <div>
+              <strong>Route 解決</strong><br>
+              <span style="color:#64748b;">URL に合う page.tsx を特定</span>
+            </div>
+          </div>
+
+          <!-- ② SC実行 -->
+          <div class="swim-step">
+            <span class="step-num">2</span>
+            <div>
+              <strong>SC 実行</strong> <span class="swim-tag-sc">SC</span><br>
+              <span style="color:#64748b;">async 関数を実行、DB からデータ取得</span>
+            </div>
+          </div>
+
+          <!-- ③ HTML生成 (Suspense fallback) -->
+          <div class="swim-step">
+            <span class="step-num">3</span>
+            <div>
+              <strong>HTML 生成</strong> <span class="swim-tag-sc">SC</span><br>
+              <span style="color:#64748b;">Suspense 境界の外側を先に HTML 化<br>Skeleton を fallback として埋め込む</span>
+            </div>
+          </div>
+
+          <!-- ④ CCのSSR -->
+          <div class="swim-step">
+            <span class="step-num">4</span>
+            <div>
+              <strong>CC の SSR</strong> <span class="swim-tag-cc">CC</span><br>
+              <span style="color:#64748b;">CC も初回は サーバーで HTML 生成<br>（イベントハンドラはまだ無効）</span>
+            </div>
+          </div>
+
+          <!-- ⑤ ストリーミング完了 -->
+          <div class="swim-step">
+            <span class="step-num">5</span>
+            <div>
+              <strong>Suspense 解決</strong> <span class="swim-tag-sc">SC</span><br>
+              <span style="color:#64748b;">async SC が完了 → Skeleton を差し替え<br>完全な HTML をストリーミング送信</span>
+            </div>
+          </div>
+
+          <!-- 空行 (ブラウザ⑦に対応する空白) -->
+          <div class="swim-empty"></div>
+          <div class="swim-empty"></div>
+        </div>
+
+        <!-- 中央 矢印列 -->
+        <div class="swimlane-center">
+          <div style="padding:8px 0; font-weight:800; font-size:11px; color:#475569; text-align:center; border-bottom:1px dashed #e2e8f0; min-height:40px; display:flex; align-items:center; justify-content:center;">通信</div>
+          <!-- ①に対応 -->
+          <div class="swim-arrow">
+            <div style="text-align:center;">
+              <div style="font-size:11px;">→</div>
+              <span class="swim-tag-net">HTTP</span>
+            </div>
+          </div>
+          <!-- ②に対応 (サーバー内処理) -->
+          <div class="swim-arrow" style="color:#cbd5e1;">—</div>
+          <!-- ③に対応: 先行HTMLを送信 -->
+          <div class="swim-arrow">
+            <div style="text-align:center;">
+              <div style="font-size:11px;">←</div>
+              <span class="swim-tag-net">HTML</span>
+              <div style="font-size:9px; color:#64748b; margin-top:2px;">先行送信</div>
+            </div>
+          </div>
+          <!-- ④に対応: JSバンドル送信 -->
+          <div class="swim-arrow">
+            <div style="text-align:center;">
+              <div style="font-size:11px;">←</div>
+              <span class="swim-tag-net">JS</span>
+              <div style="font-size:9px; color:#64748b; margin-top:2px;">Bundle</div>
+            </div>
+          </div>
+          <!-- ⑤に対応: 差分HTML -->
+          <div class="swim-arrow">
+            <div style="text-align:center;">
+              <div style="font-size:11px;">←</div>
+              <span class="swim-tag-net">HTML</span>
+              <div style="font-size:9px; color:#64748b; margin-top:2px;">差分</div>
+            </div>
+          </div>
+          <!-- ブラウザ⑦に対応 (サーバー無処理) -->
+          <div class="swim-arrow" style="color:#cbd5e1;">—</div>
+          <!-- ブラウザ⑧に対応 (サーバー無処理) -->
+          <div class="swim-arrow" style="color:#cbd5e1;">—</div>
+        </div>
+
+        <!-- ブラウザ列 -->
+        <div class="swimlane-browser">
+          <div class="swimlane-col-header">🌐 ブラウザ</div>
+
+          <!-- ①に対応: リクエスト送信 -->
+          <div class="swim-step">
+            <span class="step-num" style="background:#166534;">1</span>
+            <div>
+              <strong>HTTP リクエスト送信</strong> <span class="swim-tag-net">HTTP</span><br>
+              <span style="color:#64748b;">URL バーに入力 / Link クリック</span>
+            </div>
+          </div>
+
+          <!-- ②に対応: 待機 -->
+          <div class="swim-empty"></div>
+
+          <!-- ③に対応: Skeleton表示 -->
+          <div class="swim-step">
+            <span class="step-num" style="background:#166534;">3</span>
+            <div>
+              <strong>Skeleton 表示</strong><br>
+              <span style="color:#64748b;">先行 HTML を受信して即レンダリング<br>ローディング UI が表示される</span>
+            </div>
+          </div>
+
+          <!-- ④に対応: JS受信 -->
+          <div class="swim-step">
+            <span class="step-num" style="background:#166534;">4</span>
+            <div>
+              <strong>JS Bundle 受信</strong><br>
+              <span style="color:#64748b;">CC 用 JS をダウンロード・実行開始</span>
+            </div>
+          </div>
+
+          <!-- ⑤に対応: Skeleton→実コンテンツ -->
+          <div class="swim-step">
+            <span class="step-num" style="background:#166534;">5</span>
+            <div>
+              <strong>コンテンツ差し替え</strong><br>
+              <span style="color:#64748b;">ストリーミング完了 → Skeleton が<br>実データのコンテンツに切り替わる</span>
+            </div>
+          </div>
+
+          <!-- ⑥ Hydration -->
+          <div class="swim-step">
+            <span class="step-num" style="background:#166534;">6</span>
+            <div>
+              <strong>Hydration</strong> <span class="swim-tag-cc">CC</span><br>
+              <span style="color:#64748b;">React が HTML に JS を紐付け<br>イベントハンドラが有効になる</span>
+            </div>
+          </div>
+
+          <!-- ⑦ インタラクティブ -->
+          <div class="swim-step" style="border-bottom:none;">
+            <span class="step-num" style="background:#166534;">7</span>
+            <div>
+              <strong>インタラクティブ化完了</strong> <span class="swim-tag-cc">CC</span><br>
+              <span style="color:#64748b;">クリック・入力などの操作が可能に</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 凡例 -->
+      <div style="display:flex; gap:16px; flex-wrap:wrap; font-size:11px; margin-bottom:24px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:10px 14px;">
+        <span><span class="swim-tag-sc">SC</span> サーバーで実行</span>
+        <span><span class="swim-tag-cc">CC</span> ブラウザで実行 (JS Hydration 後)</span>
+        <span><span class="swim-tag-net">HTTP / HTML / JS</span> ネットワーク通信</span>
+        <span style="color:#64748b;">— : 対応する処理なし (待機)</span>
+      </div>
+
       <!-- 一言まとめ -->
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;">
         <div style="border:2px solid #3b82f6; border-radius:8px; padding:14px;">
@@ -1430,9 +1662,14 @@
             <td><code>useState</code>/<code>useEffect</code>/<code>useTransition</code> で自動更新を制御するため</td>
           </tr>
           <tr>
-            <td><span class="file-badge">table.tsx</span></td>
+            <td><span class="file-badge">invoices/table.tsx</span></td>
             <td style="text-align:center;"><span style="color:#3b82f6; font-weight:700;">SC</span></td>
             <td>非同期関数として <code>fetchFilteredInvoices()</code> を直接 <code>await</code> するため</td>
+          </tr>
+          <tr>
+            <td><span class="file-badge">customers/table.tsx</span></td>
+            <td style="text-align:center;"><span style="color:#3b82f6; font-weight:700;">SC</span></td>
+            <td>props を受け取るだけ (DB取得は page.tsx 側)。<code>Search [CC]</code> を子として使用</td>
           </tr>
           <tr>
             <td><span class="file-badge">cards.tsx</span></td>
@@ -1571,7 +1808,7 @@
             <!-- DashboardShell [CC]: ヘッダー行（コントロール）のみを所有する CC -->
             <!-- children (SC群) は page.tsx [SC] から props として渡される — children パターン -->
             <div class="cc" style="padding:8px 12px; margin-bottom:12px;">
-              <span class="component-label" data-path="src/components/dashboard/dashboard-shell.tsx">dashboard-shell.tsx [CC]</span>
+              <span class="component-label" data-path="src/components/dashboard/(overview)/dashboard-shell.tsx">dashboard-shell.tsx [CC]</span>
 
               <!-- CC が所有するのはここだけ: <main> の h1 + 自動更新コントロール行 -->
               <div style="display:flex; align-items:center; justify-content:space-between;">
@@ -1599,34 +1836,34 @@
 
             <!-- Cards -->
             <div class="sc" style="padding:12px; margin-bottom:12px;">
-              <span class="component-label" data-path="src/components/dashboard/cards.tsx">cards.tsx CardWrapper [SC] — Suspense内</span>
+              <span class="component-label" data-path="src/components/dashboard/(overview)/cards.tsx">cards.tsx CardWrapper [SC] — Suspense内</span>
               <p class="text-sm text-gray mb-2">
                 fallback: <code>&lt;CardsSkeleton /&gt;</code> (取得中はグレーのプレースホルダー4枚)
               </p>
               <div class="cards-grid">
                 <div class="sc stat-card">
-                  <span class="component-label" style="font-size:9px;" data-path="src/components/dashboard/cards.tsx">Card [SC]</span>
+                  <span class="component-label" style="font-size:9px;" data-path="src/components/dashboard/(overview)/cards.tsx">Card [SC]</span>
                   <div class="stat-card-header">💰 Collected</div>
                   <div class="stat-card-value">
                     <span class="dynamic">$114,818</span>
                   </div>
                 </div>
                 <div class="sc stat-card">
-                  <span class="component-label" style="font-size:9px;" data-path="src/components/dashboard/cards.tsx">Card [SC]</span>
+                  <span class="component-label" style="font-size:9px;" data-path="src/components/dashboard/(overview)/cards.tsx">Card [SC]</span>
                   <div class="stat-card-header">⏰ Pending</div>
                   <div class="stat-card-value">
                     <span class="dynamic">$225,504</span>
                   </div>
                 </div>
                 <div class="sc stat-card">
-                  <span class="component-label" style="font-size:9px;" data-path="src/components/dashboard/cards.tsx">Card [SC]</span>
+                  <span class="component-label" style="font-size:9px;" data-path="src/components/dashboard/(overview)/cards.tsx">Card [SC]</span>
                   <div class="stat-card-header">📥 Total Invoices</div>
                   <div class="stat-card-value">
                     <span class="dynamic">13</span>
                   </div>
                 </div>
                 <div class="sc stat-card">
-                  <span class="component-label" style="font-size:9px;" data-path="src/components/dashboard/cards.tsx">Card [SC]</span>
+                  <span class="component-label" style="font-size:9px;" data-path="src/components/dashboard/(overview)/cards.tsx">Card [SC]</span>
                   <div class="stat-card-header">👥 Total Customers</div>
                   <div class="stat-card-value">
                     <span class="dynamic">6</span>
@@ -1639,7 +1876,7 @@
             <div class="two-col">
               <!-- Revenue Chart -->
               <div class="sc" style="padding:12px;">
-                <span class="component-label" data-path="src/components/dashboard/revenue-chart.tsx">revenue-chart.tsx [SC] — Suspense内</span>
+                <span class="component-label" data-path="src/components/dashboard/(overview)/revenue-chart.tsx">revenue-chart.tsx [SC] — Suspense内</span>
                 <p class="text-sm text-gray mb-2">
                   fallback: <code>&lt;RevenueChartSkeleton /&gt;</code>
                 </p>
@@ -1669,7 +1906,7 @@
 
               <!-- Latest Invoices -->
               <div class="sc" style="padding:12px;">
-                <span class="component-label" data-path="src/components/dashboard/latest-invoices.tsx">latest-invoices.tsx [SC] — Suspense内</span>
+                <span class="component-label" data-path="src/components/dashboard/(overview)/latest-invoices.tsx">latest-invoices.tsx [SC] — Suspense内</span>
                 <p class="text-sm text-gray mb-2">
                   fallback: <code>&lt;LatestInvoicesSkeleton /&gt;</code>
                 </p>
@@ -1795,7 +2032,7 @@
             <!-- Search + Create -->
             <div class="flex gap-2 mb-4" style="align-items:center;">
               <div class="cc" style="flex:1; padding:8px;">
-                <span class="component-label" data-path="src/components/common/search.tsx">search.tsx [CC]</span>
+                <span class="component-label" data-path="src/components/dashboard/search.tsx">search.tsx [CC]</span>
                 <div class="search-bar">
                   <span style="color:#9ca3af;">🔍</span>
                   <input type="text" placeholder="Search invoices..." readonly />
@@ -1807,7 +2044,7 @@
                 </div>
               </div>
               <div class="cc" style="padding:8px;">
-                <span class="component-label" data-path="src/components/invoices/buttons.tsx">buttons.tsx CreateInvoice [CC]</span>
+                <span class="component-label" data-path="src/components/dashboard/invoices/buttons.tsx">buttons.tsx CreateInvoice [CC]</span>
                 <button class="btn btn-primary nav-btn" data-to="/dashboard/invoices/create" onclick="navigateTo('screen4','/dashboard/invoices/create')">Create Invoice ＋</button>
                 <div class="text-sm text-gray mt-4">
                   📄 <code>&lt;Link href="/dashboard/invoices/create"&gt;</code>
@@ -1817,7 +2054,7 @@
 
             <!-- Table -->
             <div class="sc" style="padding:12px; margin-bottom:12px;">
-              <span class="component-label" data-path="src/components/invoices/table.tsx">table.tsx [SC] — Suspense内</span>
+              <span class="component-label" data-path="src/components/dashboard/invoices/table.tsx">table.tsx [SC] — Suspense内</span>
               <p class="text-sm text-gray mb-2">
                 fallback: <code>&lt;InvoicesTableSkeleton /&gt;</code> &nbsp;|&nbsp;
                 key={query + currentPage} が変わるたびにスケルトン再表示
@@ -1846,13 +2083,13 @@
                     <td><span class="dynamic">Jan 14, 2024</span></td>
                     <td>
                       <div class="cc" style="padding:2px 4px; display:inline-block;">
-                        <span class="component-label" style="font-size:8px;" data-path="src/components/invoices/status.tsx">status.tsx [CC]</span>
+                        <span class="component-label" style="font-size:8px;" data-path="src/components/dashboard/invoices/status.tsx">status.tsx [SC]</span>
                         <span class="badge badge-paid">✓ paid</span>
                       </div>
                     </td>
                     <td>
                       <div class="cc" style="padding:2px; display:inline-flex; gap:4px;">
-                        <span class="component-label" style="font-size:8px;" data-path="src/components/invoices/buttons.tsx">buttons.tsx [CC]</span>
+                        <span class="component-label" style="font-size:8px;" data-path="src/components/dashboard/invoices/buttons.tsx">buttons.tsx [CC]</span>
                         <button class="btn-icon nav-btn" data-to="/dashboard/invoices/[id]/edit" onclick="navigateTo('screen5','/dashboard/invoices/[id]/edit')">✏️</button>
                         <button class="btn-icon nav-btn" data-to="削除確認モーダル" onclick="navigateTo('screen3b',null)">🗑️</button>
                       </div>
@@ -1932,7 +2169,7 @@
 
             <!-- Pagination -->
             <div class="cc" style="padding:10px; display:flex; justify-content:center;">
-              <span class="component-label" data-path="src/components/invoices/pagination.tsx">pagination.tsx [CC]</span>
+              <span class="component-label" data-path="src/components/dashboard/invoices/pagination.tsx">pagination.tsx [CC]</span>
               <div class="pagination">
                 <div class="page-btn disabled">←</div>
                 <div class="page-btn active">1</div>
@@ -1975,7 +2212,7 @@
     <div class="page-body">
 
       <div class="cc" style="padding:12px;">
-        <span class="component-label" data-path="src/components/invoices/buttons.tsx">buttons.tsx DeleteInvoice [CC]</span>
+        <span class="component-label" data-path="src/components/dashboard/invoices/buttons.tsx">buttons.tsx DeleteInvoice [CC]</span>
 
         <div class="modal-overlay">
           <div class="cc modal">
@@ -2077,7 +2314,7 @@
 
             <!-- Breadcrumb -->
             <div class="sc" style="padding:8px; margin-bottom:12px;">
-              <span class="component-label" data-path="src/components/invoices/breadcrumbs.tsx">breadcrumbs.tsx [SC]</span>
+              <span class="component-label" data-path="src/components/dashboard/invoices/breadcrumbs.tsx">breadcrumbs.tsx [SC]</span>
               <div class="breadcrumb">
                 <a style="color:#3b82f6;">Invoices</a>
                 <span class="sep">/</span>
@@ -2090,7 +2327,7 @@
 
             <!-- Create Form -->
             <div class="cc" style="padding:12px; max-width:600px;">
-              <span class="component-label" data-path="src/components/invoices/create-form.tsx">create-form.tsx [CC] — useActionState(createInvoice, initialState)</span>
+              <span class="component-label" data-path="src/components/dashboard/invoices/create-form.tsx">create-form.tsx [CC] — useActionState(createInvoice, initialState)</span>
 
               <div class="form-section">
                 <!-- Customer Select -->
@@ -2228,7 +2465,7 @@
 
             <!-- Breadcrumb -->
             <div class="sc" style="padding:8px; margin-bottom:12px;">
-              <span class="component-label" data-path="src/components/invoices/breadcrumbs.tsx">breadcrumbs.tsx [SC]</span>
+              <span class="component-label" data-path="src/components/dashboard/invoices/breadcrumbs.tsx">breadcrumbs.tsx [SC]</span>
               <div class="breadcrumb">
                 <a style="color:#3b82f6;">Invoices</a>
                 <span class="sep">/</span>
@@ -2238,7 +2475,7 @@
 
             <!-- Edit Form -->
             <div class="cc" style="padding:12px; max-width:600px;">
-              <span class="component-label" data-path="src/components/invoices/edit-form.tsx">edit-form.tsx [CC] — useActionState(updateInvoiceWithId, initialState)</span>
+              <span class="component-label" data-path="src/components/dashboard/invoices/edit-form.tsx">edit-form.tsx [CC] — useActionState(updateInvoiceWithId, initialState)</span>
 
               <div class="form-section">
                 <!-- Customer Select (existing value) -->
@@ -2388,42 +2625,142 @@
             </div>
           </div>
 
-          <!-- Customers Page Content (現在はプレースホルダー) -->
+          <!-- Customers Page Content -->
           <div class="sc dashboard-content" style="padding:12px;">
-            <span class="component-label" data-path="src/app/(site)/dashboard/customers/page.tsx">customers/page.tsx [SC]</span>
+            <span class="component-label" data-path="src/app/(site)/dashboard/customers/page.tsx">customers/page.tsx [SC] — async / fetchFilteredCustomers(query)</span>
 
-            <!-- 現在の実装: プレースホルダーのみ -->
-            <div style="background:#f9fafb; border-radius:8px; padding:20px; border:2px dashed #d1d5db;">
-              <div style="font-size:11px; color:#9ca3af; margin-bottom:8px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em;">現在の実装内容</div>
-              <p style="font-size:14px; color:#374151; font-family:monospace;">&lt;p&gt;Dashboard Customers Page&lt;/p&gt;</p>
-              <div style="margin-top:12px; font-size:11px; color:#9ca3af;">
-                → ブラウザには「Dashboard Customers Page」というテキストだけが表示される
+            <!-- CustomersTable SC -->
+            <div class="sc" style="padding:12px;">
+              <span class="component-label" data-path="src/components/dashboard/customers/table.tsx">table.tsx CustomersTable [SC]</span>
+
+              <h1 class="screen-title mb-4" style="font-style:italic;">Customers</h1>
+
+              <!-- Search (CC) — table.tsx 内で直接使用 -->
+              <div class="cc" style="padding:8px; margin-bottom:16px;">
+                <span class="component-label" data-path="src/components/dashboard/search.tsx">search.tsx [CC]</span>
+                <div class="search-bar">
+                  <span style="color:#9ca3af;">🔍</span>
+                  <input type="text" placeholder="Search customers..." readonly />
+                </div>
+                <div class="text-sm text-gray mt-4">
+                  useSearchParams / useRouter<br>
+                  <span class="dynamic">defaultValue = URLの query パラメータ</span>
+                </div>
               </div>
-            </div>
-            <div style="margin-top:8px; font-size:10px; color:#dc2626; font-weight:600;">
-              ⚠️ チュートリアル未実装ページ (プレースホルダー)
+
+              <!-- PC table -->
+              <table class="invoices-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Total Invoices</th>
+                    <th>Total Pending</th>
+                    <th>Total Paid</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="flex gap-2" style="align-items:center;">
+                        <div class="avatar" style="width:28px;height:28px;font-size:10px;">ER</div>
+                        <span class="dynamic">Evil Rabbit</span>
+                      </div>
+                    </td>
+                    <td><span class="dynamic">evil@rabbit.com</span></td>
+                    <td><span class="dynamic">2</span></td>
+                    <td><span class="dynamic">$1,249.00</span></td>
+                    <td><span class="dynamic">$1,748.00</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="flex gap-2" style="align-items:center;">
+                        <div class="avatar" style="width:28px;height:28px;font-size:10px;background:#fef3c7;color:#92400e;">DO</div>
+                        <span class="dynamic">Delba de Oliveira</span>
+                      </div>
+                    </td>
+                    <td><span class="dynamic">delba@oliveira.com</span></td>
+                    <td><span class="dynamic">3</span></td>
+                    <td><span class="dynamic">$546.17</span></td>
+                    <td><span class="dynamic">$0.00</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="flex gap-2" style="align-items:center;">
+                        <div class="avatar" style="width:28px;height:28px;font-size:10px;background:#dcfce7;color:#166534;">LR</div>
+                        <span class="dynamic">Lee Robinson</span>
+                      </div>
+                    </td>
+                    <td><span class="dynamic">lee@robinson.com</span></td>
+                    <td><span class="dynamic">3</span></td>
+                    <td><span class="dynamic">$0.00</span></td>
+                    <td><span class="dynamic">$1,200.00</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="flex gap-2" style="align-items:center;">
+                        <div class="avatar" style="width:28px;height:28px;font-size:10px;background:#fce7f3;color:#9d174d;">MN</div>
+                        <span class="dynamic">Michael Novotny</span>
+                      </div>
+                    </td>
+                    <td><span class="dynamic">michael@novotny.com</span></td>
+                    <td><span class="dynamic">2</span></td>
+                    <td><span class="dynamic">$0.00</span></td>
+                    <td><span class="dynamic">$1,143.46</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="flex gap-2" style="align-items:center;">
+                        <div class="avatar" style="width:28px;height:28px;font-size:10px;background:#fef9c3;color:#92400e;">AB</div>
+                        <span class="dynamic">Amy Burns</span>
+                      </div>
+                    </td>
+                    <td><span class="dynamic">amy@burns.com</span></td>
+                    <td><span class="dynamic">1</span></td>
+                    <td><span class="dynamic">$120.56</span></td>
+                    <td><span class="dynamic">$0.00</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="flex gap-2" style="align-items:center;">
+                        <div class="avatar" style="width:28px;height:28px;font-size:10px;background:#ede9fe;color:#5b21b6;">BO</div>
+                        <span class="dynamic">Balazs Orban</span>
+                      </div>
+                    </td>
+                    <td><span class="dynamic">balazs@orban.com</span></td>
+                    <td><span class="dynamic">2</span></td>
+                    <td><span class="dynamic">$0.00</span></td>
+                    <td><span class="dynamic">$706.66</span></td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="text-sm text-gray mt-4">
+                <span class="dynamic">全6顧客 / ページネーションなし</span>
+              </p>
             </div>
           </div>
         </div>
       </div>
 
       <div class="annotation">
-        <h4>現在の実装状態</h4>
+        <h4>コンポーネント構成</h4>
         <ul>
-          <li><code>customers/page.tsx</code> は <strong>プレースホルダー</strong> — <code>return &lt;p&gt;Dashboard Customers Page&lt;/p&gt;</code> のみ</li>
-          <li>DBアクセスなし・子コンポーネントなし・searchParams 未使用の最小実装</li>
-          <li><code>DashboardLayout</code> は適用済み (layout.tsx が包んでいる) — サイドナビは表示される</li>
-        </ul>
-        <h4 style="margin-top:8px;">queries.ts に実装済みの関数 (将来使用可)</h4>
-        <ul>
-          <li><code>fetchCustomers()</code> — id・name のみ取得 (フォームのセレクト用)</li>
-          <li><code>fetchFilteredCustomers(query)</code> — 検索対応の顧客一覧 (total_invoices / total_pending / total_paid 付き)</li>
+          <li><code>customers/page.tsx [SC]</code> — <code>async</code> 関数。<code>searchParams.query</code> を受け取り <code>fetchFilteredCustomers(query)</code> を直接 <code>await</code></li>
+          <li><code>CustomersTable [SC]</code> (<code>src/components/customers/table.tsx</code>) — props で受け取った customers を表示。<code>Search [CC]</code> を内部で直接使用</li>
+          <li>ページネーションなし — 請求書一覧と異なり全件取得</li>
+          <li>編集・削除ボタンなし — 閲覧専用</li>
+          <li>モバイル: カード形式 / PC: テーブル形式 (請求書一覧と同じレスポンシブ構成)</li>
         </ul>
       </div>
       <div class="data-flow">
-        <h4>現在のデータフロー (最小実装)</h4>
-        customers/page.tsx [SC] → &lt;p&gt;Dashboard Customers Page&lt;/p&gt; のみレンダリング<br>
-        DBアクセスなし / props なし / Suspense なし
+        <h4>データフロー</h4>
+        customers/page.tsx [SC]<br>
+        &nbsp;&nbsp;→ searchParams.query を受け取る (Promise として await)<br>
+        &nbsp;&nbsp;→ fetchFilteredCustomers(query)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ prisma.customer.findMany({ include: { invoices: { select: { amount, status } } } })<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ JS: filter(paid/pending) + reduce(sum) で各顧客の合計を計算<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ formatCurrency() で文字列に変換済みの FormattedCustomersTable[] を返す<br>
+        &nbsp;&nbsp;→ &lt;CustomersTable customers={customers} /&gt; へ props として渡す
       </div>
     </div>
   </div>

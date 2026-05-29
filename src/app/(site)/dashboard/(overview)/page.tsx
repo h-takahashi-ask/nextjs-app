@@ -4,19 +4,19 @@
  *
  * 【Next.jsキャッチアップ】【Frontend】【Page】【ダッシュボード】【関連】src/app/(site)/dashboard/layout.tsx                  : 本ページを包むダッシュボードレイアウト
  * 【Next.jsキャッチアップ】【Frontend】【Page】【ダッシュボード】【関連】src/app/(site)/dashboard/(overview)/loading.tsx       : ページ全体のフォールバック (Next.jsが自動でSuspenseを生成)
- * 【Next.jsキャッチアップ】【Frontend】【Page】【ダッシュボード】【関連】src/components/common/skeletons.tsx                   : 各SuspenseのfallbackになるSkeletonコンポーネント群
+ * 【Next.jsキャッチアップ】【Frontend】【Page】【ダッシュボード】【関連】src/components/dashboard/(overview)/skeletons.tsx      : 各SuspenseのfallbackになるSkeletonコンポーネント群
  */
 
 import { Suspense } from 'react';
-import CardWrapper from '@/components/dashboard/cards';
-import RevenueChart from '@/components/dashboard/revenue-chart';
-import LatestInvoices from '@/components/dashboard/latest-invoices';
-import DashboardShell from '@/components/dashboard/dashboard-shell';
+import CardWrapper from '@/components/dashboard/(overview)/cards';
+import RevenueChart from '@/components/dashboard/(overview)/revenue-chart';
+import LatestInvoices from '@/components/dashboard/(overview)/latest-invoices';
+import DashboardShell from '@/components/dashboard/(overview)/dashboard-shell';
 import {
   RevenueChartSkeleton,
   LatestInvoicesSkeleton,
   CardsSkeleton,
-} from '@/components/common/skeletons';
+} from '@/components/dashboard/(overview)/skeletons';
 
 /**
  * /dashboardのUIを構築するページコンポーネント

@@ -1,3 +1,10 @@
+/**
+ * 【Next.jsキャッチアップ】【Frontend】【Component】【ボタン】【概要】フォームの送信ボタンとして使う汎用ボタンUI部品
+ *
+ * 【Next.jsキャッチアップ】【Frontend】【Component】【ボタン】【関連】src/components/dashboard/invoices/create-form.tsx : 請求書作成フォームの送信ボタン
+ * 【Next.jsキャッチアップ】【Frontend】【Component】【ボタン】【関連】src/components/dashboard/invoices/edit-form.tsx  : 請求書編集フォームの送信ボタン
+ */
+
 import clsx from 'clsx';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

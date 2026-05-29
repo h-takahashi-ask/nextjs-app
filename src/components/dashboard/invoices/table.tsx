@@ -4,13 +4,13 @@
  *
  * 【Next.jsキャッチアップ】【Frontend】【Component】【請求書一覧テーブル】【関連】src/app/(site)/dashboard/invoices/page.tsx : 本コンポーネントの利用画面(Suspenseでラップされる)
  * 【Next.jsキャッチアップ】【Frontend】【Component】【請求書一覧テーブル】【関連】src/lib/database/queries.ts : fetchFilteredInvoicesの提供元
- * 【Next.jsキャッチアップ】【Frontend】【Component】【請求書一覧テーブル】【関連】src/components/invoices/buttons.tsx : 更新・削除ボタン
- * 【Next.jsキャッチアップ】【Frontend】【Component】【請求書一覧テーブル】【関連】src/components/invoices/status.tsx : ステータスバッジ
+ * 【Next.jsキャッチアップ】【Frontend】【Component】【請求書一覧テーブル】【関連】src/components/dashboard/invoices/buttons.tsx : 更新・削除ボタン
+ * 【Next.jsキャッチアップ】【Frontend】【Component】【請求書一覧テーブル】【関連】src/components/dashboard/invoices/status.tsx : ステータスバッジ
  */
 
 import Image from 'next/image';
-import { UpdateInvoice, DeleteInvoice } from '@/components/invoices/buttons';
-import InvoiceStatus from '@/components/invoices/status';
+import { UpdateInvoice, DeleteInvoice } from '@/components/dashboard/invoices/buttons';
+import InvoiceStatus from '@/components/dashboard/invoices/status';
 import { formatDateToLocal, formatCurrency } from '@/lib/utils';
 import { fetchFilteredInvoices } from '@/lib/database/queries';
 
