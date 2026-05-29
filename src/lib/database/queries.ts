@@ -9,7 +9,7 @@
  * 【Next.jsキャッチアップ】【Frontend】【Lib】【ダッシュボードデータ】【関連】src/components/dashboard/cards.tsx          : fetchCardDataを使用
  */
 import { prisma } from '@/lib/database/client'
-import { Revenue } from '@/lib/database/models'
+import { Revenue, User } from '@/lib/database/models'
 import {
   CustomerField,
   FormattedCustomersTable,
@@ -420,5 +420,30 @@ export async function fetchFilteredCustomers(
   } catch (error) {
     console.error('Database Error:', error)
     throw new Error('Failed to fetch customer table.')
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 認証
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * メールアドレスでDBからユーザーを1件取得する
+ *
+ * @param email - 検索対象のメールアドレス
+ * @returns 該当ユーザーが存在する場合はUserオブジェクト、存在しない場合は null
+ *
+ * @remarks
+ * 認証フロー (nextauth.tsのauthorize) から呼ばれ、ログインフォームのメールアドレスに対応するユーザーを取得する
+ */
+export async function getUser(email: string): Promise<User | null> {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+    return user
+  } catch (error) {
+    console.error('Failed to fetch user:', error);
+    throw new Error('Failed to fetch user.');
   }
 }
