@@ -5,12 +5,12 @@
  */
 
 import { Suspense } from 'react';
-import Pagination from '@/components/invoices/pagination';
-import Search from '@/components/common/search';
-import Table from '@/components/invoices/table';  
-import { CreateInvoice } from '@/components/invoices/buttons';
+import Pagination from '@/components/dashboard/invoices/pagination';
+import Search from '@/components/dashboard/search';
+import Table from '@/components/dashboard/invoices/table';
+import { CreateInvoice } from '@/components/dashboard/invoices/buttons';
 import { lusitana } from '@/components/common/fonts';
-import { InvoicesTableSkeleton } from '@/components/common/skeletons';
+import { InvoicesTableSkeleton } from '@/components/dashboard/invoices/skeletons';
 import { fetchInvoicesPages } from '@/lib/database/queries';
 
 

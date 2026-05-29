@@ -4,7 +4,7 @@
  *
  * 【Next.jsキャッチアップ】【Frontend】【Component】【請求書編集フォーム】【関連】src/app/(site)/dashboard/invoices/[id]/edit/page.tsx : 本コンポーネントを呼び出すページ
  * 【Next.jsキャッチアップ】【Frontend】【Component】【請求書編集フォーム】【関連】src/lib/actions/invoices.ts : updateInvoice Server Action
- * 【Next.jsキャッチアップ】【Frontend】【Component】【請求書編集フォーム】【関連】src/components/invoices/create-form.tsx : 作成フォーム(構成が類似)
+ * 【Next.jsキャッチアップ】【Frontend】【Component】【請求書編集フォーム】【関連】src/components/dashboard/invoices/create-form.tsx : 作成フォーム(構成が類似)
  */
 
 // 'use client': updateInvoice.bind() でServer Actionに invoice.id を束縛するため

@@ -1,7 +1,7 @@
 /**
  * 【Next.jsキャッチアップ】【Frontend】【Component】【請求書操作ボタン】【概要】請求書一覧画面で使う操作ボタン(新規作成・更新・削除)のUI部品
  *
- * 【Next.jsキャッチアップ】【Frontend】【Component】【請求書操作ボタン】【関連】src/components/invoices/table.tsx : UpdateInvoice / DeleteInvoiceの利用箇所
+ * 【Next.jsキャッチアップ】【Frontend】【Component】【請求書操作ボタン】【関連】src/components/dashboard/invoices/table.tsx : UpdateInvoice / DeleteInvoiceの利用箇所
  * 【Next.jsキャッチアップ】【Frontend】【Component】【請求書操作ボタン】【関連】src/app/(site)/dashboard/invoices/page.tsx : CreateInvoiceの利用箇所
  */
 
@@ -15,7 +15,7 @@ import Image from 'next/image';
 import { useRef } from 'react';
 import { deleteInvoice } from '@/lib/actions/invoices';
 import { formatCurrency, formatDateToLocal } from '@/lib/utils';
-import InvoiceStatus from '@/components/invoices/status';
+import InvoiceStatus from '@/components/dashboard/invoices/status';
 import { InvoicesTable } from '@/lib/types';
 
 /**

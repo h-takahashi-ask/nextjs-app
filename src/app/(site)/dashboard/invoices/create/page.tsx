@@ -2,13 +2,13 @@
  * 【Next.jsキャッチアップ】【Frontend】【Page】【請求書作成】【概要】新規請求書を作成するページ(URLパス: /dashboard/invoices/create)
  * 【Next.jsキャッチアップ】【Frontend】【Page】【請求書作成】【概要】顧客一覧をサーバーで取得し、作成フォームに渡す
  *
- * 【Next.jsキャッチアップ】【Frontend】【Page】【請求書作成】【関連】src/components/invoices/create-form.tsx : 請求書作成フォーム
- * 【Next.jsキャッチアップ】【Frontend】【Page】【請求書作成】【関連】src/components/invoices/breadcrumbs.tsx : パンくずナビ
+ * 【Next.jsキャッチアップ】【Frontend】【Page】【請求書作成】【関連】src/components/dashboard/invoices/create-form.tsx : 請求書作成フォーム
+ * 【Next.jsキャッチアップ】【Frontend】【Page】【請求書作成】【関連】src/components/dashboard/invoices/breadcrumbs.tsx : パンくずナビ
  * 【Next.jsキャッチアップ】【Frontend】【Page】【請求書作成】【関連】src/app/(site)/dashboard/invoices/page.tsx : 請求書一覧(キャンセル時の戻り先)
  */
 
-import Form from '@/components/invoices/create-form';
-import Breadcrumbs from '@/components/invoices/breadcrumbs';
+import Form from '@/components/dashboard/invoices/create-form';
+import Breadcrumbs from '@/components/dashboard/invoices/breadcrumbs';
 import { fetchCustomers } from '@/lib/database/queries';
 
 /**
