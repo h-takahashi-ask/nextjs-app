@@ -11,7 +11,7 @@ import Table from '@/components/dashboard/invoices/table';
 import { CreateInvoice } from '@/components/dashboard/invoices/buttons';
 import { lusitana } from '@/components/common/fonts';
 import { InvoicesTableSkeleton } from '@/components/dashboard/invoices/skeletons';
-import { fetchInvoicesPages } from '@/lib/database/queries';
+import { fetchInvoicesPages } from '@/lib/db/prisma/queries';
 
 
 

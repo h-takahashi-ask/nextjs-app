@@ -12,7 +12,7 @@
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { prisma } from '@/lib/database/client';
+import { prismaClient } from '@/lib/db/prisma/client';
 
 // 請求書一覧ページのURL。revalidatePath と redirect の両方で使うため定数化
 const redirectUrl = '/dashboard/invoices';
@@ -118,7 +118,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
   // DB操作のみを try/catch でラップする
   try {
     // $transaction: BEGIN → コールバック正常終了で COMMIT、例外発生で自動 ROLLBACK
-    await prisma.$transaction(async (tx) => {
+    await prismaClient.$transaction(async (tx) => {
       const invoice = {
         data: { customerId, amount: amountInCents, status, date },
       };
@@ -186,7 +186,7 @@ export async function updateInvoice(
   // DB操作のみを try/catch でラップする
   try {
     // $transaction: BEGIN → コールバック正常終了で COMMIT、例外発生で自動 ROLLBACK
-    await prisma.$transaction(async (tx) => {
+    await prismaClient.$transaction(async (tx) => {
       // 同一請求書への並行更新を直列化する（lost update 防止）
       await tx.$executeRaw`SELECT pg_advisory_xact_lock(${INVOICE_UPDATE_LOCK_CLASS}::int4, hashtext(${id}))`;
       const invoice = {
@@ -229,7 +229,7 @@ export async function deleteInvoice(id: string) {
   // DB操作のみを try/catch でラップする
   try {
     // $transaction: BEGIN → コールバック正常終了で COMMIT、例外発生で自動 ROLLBACK
-    await prisma.$transaction(async (tx) => {
+    await prismaClient.$transaction(async (tx) => {
       // 変数名を query にしているのは、関数名 deleteInvoice と同名にするとシャドウイングになるため
       const query = { where: { id } };
       await tx.invoice.delete(query);

@@ -9,7 +9,7 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { lusitana } from '@/components/common/fonts';
-import { fetchLatestInvoices } from '@/lib/database/queries';
+import { fetchLatestInvoices } from '@/lib/db/prisma/queries';
 
 
 /**

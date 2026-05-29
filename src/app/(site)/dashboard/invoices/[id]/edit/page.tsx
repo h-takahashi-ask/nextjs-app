@@ -9,7 +9,7 @@
 
 import Form from '@/components/dashboard/invoices/edit-form';
 import Breadcrumbs from '@/components/dashboard/invoices/breadcrumbs';
-import { fetchInvoiceById, fetchCustomers } from '@/lib/database/queries';
+import { fetchInvoiceById, fetchCustomers } from '@/lib/db/prisma/queries';
 import { notFound } from 'next/navigation';
 
 /**
