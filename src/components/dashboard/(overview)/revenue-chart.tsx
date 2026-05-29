@@ -13,7 +13,7 @@
 import { generateYAxis } from '@/lib/utils';
 import { CalendarIcon } from '@heroicons/react/24/outline';
 import { lusitana } from '@/components/common/fonts';
-import { fetchRevenue } from '@/lib/database/queries';
+import { fetchRevenue } from '@/lib/db/prisma/queries';
 
 /**
  * 月別売上棒グラフを構築するサーバーコンポーネント

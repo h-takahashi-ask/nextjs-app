@@ -16,7 +16,7 @@ import { z } from 'zod';
 import bcrypt from 'bcryptjs';
 import { authConfig } from './auth.config';
 import Credentials from 'next-auth/providers/credentials';
-import { getUser } from '@/lib/database/queries';
+import { getUser } from '@/lib/db/prisma/queries';
 
 /**
  * Credentialsプロバイダーがフォームのメールとパスワードを検証するコールバック

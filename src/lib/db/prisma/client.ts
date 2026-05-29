@@ -22,7 +22,7 @@ const globalForPrisma = globalThis as unknown as {
   prisma: ReturnType<typeof createPrismaClient> | undefined
 }
 
-export const prisma = globalForPrisma.prisma ?? createPrismaClient()
+export const prismaClient = globalForPrisma.prisma ?? createPrismaClient()
 
 // 本番環境ではサーバープロセスが使い回されるため、グローバルへのキャッシュは開発環境のみ行う
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prismaClient

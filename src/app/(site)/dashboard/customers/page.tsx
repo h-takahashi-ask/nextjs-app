@@ -4,7 +4,7 @@
  * 【Next.jsキャッチアップ】【Frontend】【Page】【顧客一覧】【関連】src/app/(site)/dashboard/layout.tsx : 本ページを包むダッシュボードレイアウト
  */
 
-import { fetchFilteredCustomers } from '@/lib/database/queries';
+import { fetchFilteredCustomers } from '@/lib/db/prisma/queries';
 import CustomersTable from '@/components/dashboard/customers/table';
 import type { Metadata } from 'next';
 

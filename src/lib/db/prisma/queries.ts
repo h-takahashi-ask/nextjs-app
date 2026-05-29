@@ -8,8 +8,8 @@
  * 【Next.jsキャッチアップ】【Frontend】【Lib】【ダッシュボードデータ】【関連】src/components/dashboard/revenue-chart.tsx  : fetchRevenueを使用
  * 【Next.jsキャッチアップ】【Frontend】【Lib】【ダッシュボードデータ】【関連】src/components/dashboard/cards.tsx          : fetchCardDataを使用
  */
-import { prisma } from '@/lib/database/client'
-import { Revenue, User } from '@/lib/database/models'
+import { prismaClient } from '@/lib/db/prisma/client'
+import { Revenue, User } from '@/lib/db/prisma/models'
 import {
   CustomerField,
   FormattedCustomersTable,
@@ -24,9 +24,9 @@ import { formatCurrency } from '@/lib/utils'
 // ─────────────────────────────────────────────────────────────────────────────
 //
 // ■ 基本構造
-//   prisma.モデル名.メソッド名({ オプション })
-//   スキーマに定義したモデル名 (例: Invoice → prisma.invoice) でテーブルを指定する
-//   モデル名はPrismaが自動でcamelCase化する (例: schema の Invoice → prisma.invoice)
+//   prismaClient.モデル名.メソッド名({ オプション })
+//   スキーマに定義したモデル名 (例: Invoice → prismaClient.invoice) でテーブルを指定する
+//   モデル名はPrismaが自動でcamelCase化する (例: schema の Invoice → prismaClient.invoice)
 //
 // ■ 主なメソッド一覧
 //   findMany   → SELECT ... (複数行を取得)
@@ -43,7 +43,7 @@ import { formatCurrency } from '@/lib/utils'
 //   ─────────────────────────────────────────────────────────────────────────
 //   SELECT col1, col2                    select: { col1: true, col2: true }
 //   SELECT *                             select 省略 (または include を使用)
-//   FROM table                           prisma.モデル名 で指定
+//   FROM table                           prismaClient.モデル名 で指定
 //   JOIN t2 ON t1.fk = t2.id            select / include の中にリレーション名をネスト
 //   WHERE col = val                      where: { col: val }
 //   WHERE col LIKE '%val%'               where: { col: { contains: val } }
@@ -97,7 +97,7 @@ export async function fetchRevenue(): Promise<Revenue[]> {
     await new Promise((resolve) => setTimeout(resolve, 3000))
 
     // SQL: SELECT * FROM revenue
-    const data = await prisma.revenue.findMany()
+    const data = await prismaClient.revenue.findMany()
 
     console.log('Data fetch completed after 3 seconds.')
     return data
@@ -118,7 +118,7 @@ export async function fetchLatestInvoices(): Promise<LatestInvoice[]> {
   await new Promise((resolve) => setTimeout(resolve, 2000))
 
   try {
-    const invoices = await prisma.invoice.findMany({
+    const invoices = await prismaClient.invoice.findMany({
       // SQL: ORDER BY date DESC
       orderBy: { date: 'desc' },
       // SQL: LIMIT 5
@@ -173,17 +173,17 @@ export async function fetchCardData() {
     const [numberOfInvoices, numberOfCustomers, paidSummary, pendingSummary] =
       await Promise.all([
         // SQL: SELECT COUNT(*) FROM invoices
-        prisma.invoice.count(),
+        prismaClient.invoice.count(),
         // SQL: SELECT COUNT(*) FROM customers
-        prisma.customer.count(),
+        prismaClient.customer.count(),
         // SQL: SELECT SUM(amount) FROM invoices WHERE status = 'paid'
-        prisma.invoice.aggregate({
+        prismaClient.invoice.aggregate({
           _sum: { amount: true }, // SUM(amount)
           where: { status: 'paid' },
         }),
         // SQL: SELECT SUM(amount) FROM invoices WHERE status = 'pending'
-        prisma.invoice.aggregate({
-          _sum: { amount: true },
+        prismaClient.invoice.aggregate({
+          _sum: { amount: true }, 
           where: { status: 'pending' },
         }),
       ])
@@ -222,7 +222,7 @@ export async function fetchFilteredInvoices(
   const offset = (currentPage - 1) * ITEMS_PER_PAGE
 
   try {
-    const invoices = await prisma.invoice.findMany({
+    const invoices = await prismaClient.invoice.findMany({
       where: {
         // SQL: WHERE ... OR ... OR ... (いずれかの条件に一致する行を取得する)
         OR: [
@@ -288,7 +288,7 @@ export async function fetchInvoicesPages(query: string): Promise<number> {
   try {
     // SQL: SELECT COUNT(*) FROM invoices JOIN customers ON ... WHERE ...
     // count() は where オプションで条件を絞った件数を返す
-    const count = await prisma.invoice.count({
+    const count = await prismaClient.invoice.count({
       where: {
         OR: [
           { customer: { name: { contains: query, mode: 'insensitive' } } },
@@ -317,7 +317,7 @@ export async function fetchInvoiceById(id: string): Promise<InvoiceForm | undefi
     // SQL: SELECT id, customer_id, amount, status FROM invoices WHERE id = $1
     // findUnique は主キー (またはユニーク制約) で1行を特定する
     // 該当行が存在しない場合は null を返すため、後続で undefined チェックが必要
-    const invoice = await prisma.invoice.findUnique({
+    const invoice = await prismaClient.invoice.findUnique({
       where: { id }, // WHERE id = $id (主キーによる検索)
       select: {
         id: true,
@@ -349,7 +349,7 @@ export async function fetchInvoiceById(id: string): Promise<InvoiceForm | undefi
  */
 export async function fetchCustomers(): Promise<CustomerField[]> {
   try {
-    const customers = await prisma.customer.findMany({
+    const customers = await prismaClient.customer.findMany({
       // SQL: ORDER BY name ASC
       orderBy: { name: 'asc' },
       // SQL: SELECT id, name (フォームのセレクトに必要な2フィールドのみ取得する)
@@ -376,7 +376,7 @@ export async function fetchFilteredCustomers(
   query: string,
 ): Promise<FormattedCustomersTable[]> {
   try {
-    const customers = await prisma.customer.findMany({
+    const customers = await prismaClient.customer.findMany({
       where: {
         // SQL: WHERE name ILIKE '%query%' OR email ILIKE '%query%'
         OR: [
@@ -438,7 +438,7 @@ export async function fetchFilteredCustomers(
  */
 export async function getUser(email: string): Promise<User | null> {
   try {
-    const user = await prisma.user.findUnique({
+    const user = await prismaClient.user.findUnique({
       where: { email },
     });
     return user

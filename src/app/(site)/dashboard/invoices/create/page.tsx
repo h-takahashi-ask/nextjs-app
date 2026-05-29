@@ -9,7 +9,7 @@
 
 import Form from '@/components/dashboard/invoices/create-form';
 import Breadcrumbs from '@/components/dashboard/invoices/breadcrumbs';
-import { fetchCustomers } from '@/lib/database/queries';
+import { fetchCustomers } from '@/lib/db/prisma/queries';
 
 /**
  * 請求書作成ページのUIを構築するサーバーコンポーネント

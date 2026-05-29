@@ -12,7 +12,7 @@ import Image from 'next/image';
 import { UpdateInvoice, DeleteInvoice } from '@/components/dashboard/invoices/buttons';
 import InvoiceStatus from '@/components/dashboard/invoices/status';
 import { formatDateToLocal, formatCurrency } from '@/lib/utils';
-import { fetchFilteredInvoices } from '@/lib/database/queries';
+import { fetchFilteredInvoices } from '@/lib/db/prisma/queries';
 
 /**
  * 請求書データをテーブル形式で表示するサーバーコンポーネント

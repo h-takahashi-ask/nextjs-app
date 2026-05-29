@@ -5,7 +5,7 @@
  * 【Next.jsキャッチアップ】【Frontend】【Lib】【ユーティリティ】【関連】src/lib/database/models.ts                     : Revenue型を参照
  * 【Next.jsキャッチアップ】【Frontend】【Lib】【ユーティリティ】【関連】src/components/dashboard/revenue-chart.tsx     : generateYAxisを使用
  */
-import { Revenue } from '@/lib/database/models';
+import { Revenue } from '@/lib/db/prisma/models';
 
 /**
  * セント単位の金額を米ドル表記の文字列に変換する
