@@ -939,6 +939,7 @@
         <li><a href="#screen4">画面④ 請求書作成フォーム <code>/dashboard/invoices/create</code></a></li>
         <li><a href="#screen5">画面⑤ 請求書編集フォーム <code>/dashboard/invoices/[id]/edit</code></a></li>
         <li><a href="#screen6">画面⑥ 顧客一覧 <code>/dashboard/customers</code></a></li>
+        <li><a href="#screen7">画面⑦ ログイン <code>/login</code></a></li>
       </ol>
     </div>
   </div>
@@ -963,6 +964,11 @@
               <tr><th>ファイル名</th><th>SC / CC</th><th>役割</th></tr>
             </thead>
             <tbody>
+              <tr>
+                <td><span class="file-badge">proxy.ts</span></td>
+                <td><span style="color:#7c3aed;font-weight:700;">Edge</span><br><span style="color:#9ca3af;font-size:10px;">CDNエッジで動く</span></td>
+                <td>全リクエストをページ描画前にインターセプトする。認証チェック・リダイレクト・ヘッダー操作に使う (旧名 middleware.ts)</td>
+              </tr>
               <tr>
                 <td><span class="file-badge">page.tsx</span></td>
                 <td><span style="color:#3b82f6;font-weight:700;">SC</span></td>
@@ -994,24 +1000,28 @@
         <div>
           <p class="flow-label">レイアウトの入れ子構造 (このプロジェクト)</p>
           <div class="file-tree">
-            <span class="tree-dir">src/app/</span><br>
-            <span class="nest-arrow">├── </span><span class="tree-layout">layout.tsx</span><span class="tree-note">RootLayout — &lt;html&gt;&lt;body&gt; / 全ページ共通</span><br>
-            <span class="nest-arrow">├── </span><span class="tree-page">page.tsx</span><span class="tree-note">トップページ /</span><br>
-            <span class="nest-arrow">└── </span><span class="tree-dir">(site)/dashboard/</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-layout">layout.tsx</span><span class="tree-note">DashboardLayout — SideNav</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-dir">(overview)/</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── </span><span class="tree-page">page.tsx</span><span class="tree-note">/dashboard</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── </span><span class="tree-loading">loading.tsx</span><span class="tree-note">ページ全体ローディング</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-dir">invoices/</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── </span><span class="tree-page">page.tsx</span><span class="tree-note">/dashboard/invoices</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── </span><span class="tree-error">error.tsx</span><span class="tree-note">invoices配下のエラー境界 [CC]</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── </span><span class="tree-dir">create/</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── </span><span class="tree-page">page.tsx</span><span class="tree-note">/dashboard/invoices/create</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── </span><span class="tree-dir">[id]/edit/</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-page">page.tsx</span><span class="tree-note">/dashboard/invoices/[id]/edit</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── </span><span class="tree-notfound">not-found.tsx</span><span class="tree-note">notFound() で表示</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;└── </span><span class="tree-dir">customers/</span><br>
-            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── </span><span class="tree-page">page.tsx</span><span class="tree-note">/dashboard/customers</span>
+            <span class="tree-dir">src/</span><br>
+            <span class="nest-arrow">├── </span><span style="color:#7c3aed;font-weight:700;">proxy.ts</span><span class="tree-note">Edge認証チェック — 全リクエストをインターセプトし未認証を /login へリダイレクト</span><br>
+            <span class="nest-arrow">└── </span><span class="tree-dir">app/</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-layout">layout.tsx</span><span class="tree-note">RootLayout — &lt;html&gt;&lt;body&gt; / 全ページ共通</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-page">page.tsx</span><span class="tree-note">トップページ /</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-dir">(site)/login/</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── </span><span class="tree-page">page.tsx</span><span class="tree-note">/login — Suspense → LoginForm [CC]</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;└── </span><span class="tree-dir">(site)/dashboard/</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-layout">layout.tsx</span><span class="tree-note">DashboardLayout — SideNav</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-dir">(overview)/</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── </span><span class="tree-page">page.tsx</span><span class="tree-note">/dashboard</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── </span><span class="tree-loading">loading.tsx</span><span class="tree-note">ページ全体ローディング</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-dir">invoices/</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── </span><span class="tree-page">page.tsx</span><span class="tree-note">/dashboard/invoices</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── </span><span class="tree-error">error.tsx</span><span class="tree-note">invoices配下のエラー境界 [CC]</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── </span><span class="tree-dir">create/</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── </span><span class="tree-page">page.tsx</span><span class="tree-note">/dashboard/invoices/create</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── </span><span class="tree-dir">[id]/edit/</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-page">page.tsx</span><span class="tree-note">/dashboard/invoices/[id]/edit</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── </span><span class="tree-notfound">not-found.tsx</span><span class="tree-note">notFound() で表示</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── </span><span class="tree-dir">customers/</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── </span><span class="tree-page">page.tsx</span><span class="tree-note">/dashboard/customers</span>
           </div>
         </div>
       </div>
@@ -1019,6 +1029,8 @@
       <div class="annotation">
         <h4>ポイント</h4>
         <ul>
+          <li><strong>Edge ランタイムとは</strong> — Vercel の CDN エッジサーバーで動く軽量な実行環境。通常の Node.js サーバーとは異なり、世界中の CDN ノードで並列実行されるためユーザーに近い場所で高速に動く。ただし Node.js 専用の機能 (bcrypt / Prisma / ファイルシステム) は使えない</li>
+          <li><strong>proxy.ts はページ描画前に実行される</strong> — src/ 直下に置くとすべてのリクエストに対して自動実行される。Edge ランタイムで動くため、Node.js 専用モジュールを含まない auth.config.ts のみ import する</li>
           <li><strong>layout.tsx は入れ子になる</strong> — RootLayout → DashboardLayout の順に包まれ、children に各 page が入る</li>
           <li><strong>error.tsx は CC 必須</strong> — React のエラー境界は <code>componentDidCatch</code> を使うためクライアントコンポーネントでなければならない</li>
           <li><strong>(overview) / (site) はルートグループ</strong> — URLには影響せず、フォルダ整理のためだけに使う括弧記法</li>
@@ -1723,7 +1735,7 @@
               brought to you by Vercel.
             </p>
             <div>
-              <button class="btn btn-primary nav-btn" data-to="/dashboard" onclick="navigateTo('screen2','/dashboard')" style="font-size:13px; padding:8px 16px;">
+              <button class="btn btn-primary nav-btn" data-to="/login" onclick="navigateTo('screen7','/login')" style="font-size:13px; padding:8px 16px;">
                 Log in &nbsp;→
               </button>
               <div class="text-sm text-gray mt-4">
@@ -1797,7 +1809,7 @@
                 </div>
               </div>
               <div class="nav-spacer"></div>
-              <div class="nav-signout">⏻ Sign Out</div>
+              <div class="nav-signout nav-btn" data-to="/ (signOut Server Action)" onclick="navigateTo('screen1','/')">⏻ Sign Out</div>
             </div>
           </div>
 
@@ -2017,7 +2029,7 @@
               <a class="nav-link active nav-btn" data-to="/dashboard/invoices" onclick="navigateTo('screen3','/dashboard/invoices')">📄 Invoices</a>
               <a class="nav-link nav-btn" data-to="/dashboard/customers" onclick="navigateTo('screen6','/dashboard/customers')">👥 Customers</a>
               <div class="nav-spacer"></div>
-              <div class="nav-signout">⏻ Sign Out</div>
+              <div class="nav-signout nav-btn" data-to="/ (signOut Server Action)" onclick="navigateTo('screen1','/')">⏻ Sign Out</div>
             </div>
           </div>
 
@@ -2304,7 +2316,7 @@
               <a class="nav-link active nav-btn" data-to="/dashboard/invoices" onclick="navigateTo('screen3','/dashboard/invoices')">📄 Invoices</a>
               <a class="nav-link nav-btn" data-to="/dashboard/customers" onclick="navigateTo('screen6','/dashboard/customers')">👥 Customers</a>
               <div class="nav-spacer"></div>
-              <div class="nav-signout">⏻ Sign Out</div>
+              <div class="nav-signout nav-btn" data-to="/ (signOut Server Action)" onclick="navigateTo('screen1','/')">⏻ Sign Out</div>
             </div>
           </div>
 
@@ -2453,7 +2465,7 @@
               <a class="nav-link active nav-btn" data-to="/dashboard/invoices" onclick="navigateTo('screen3','/dashboard/invoices')">📄 Invoices</a>
               <a class="nav-link nav-btn" data-to="/dashboard/customers" onclick="navigateTo('screen6','/dashboard/customers')">👥 Customers</a>
               <div class="nav-spacer"></div>
-              <div class="nav-signout">⏻ Sign Out</div>
+              <div class="nav-signout nav-btn" data-to="/ (signOut Server Action)" onclick="navigateTo('screen1','/')">⏻ Sign Out</div>
             </div>
           </div>
 
@@ -2621,7 +2633,7 @@
               <a class="nav-link nav-btn" data-to="/dashboard/invoices" onclick="navigateTo('screen3','/dashboard/invoices')">📄 Invoices</a>
               <a class="nav-link active">👥 Customers</a>
               <div class="nav-spacer"></div>
-              <div class="nav-signout">⏻ Sign Out</div>
+              <div class="nav-signout nav-btn" data-to="/ (signOut Server Action)" onclick="navigateTo('screen1','/')">⏻ Sign Out</div>
             </div>
           </div>
 
@@ -2761,6 +2773,103 @@
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ JS: filter(paid/pending) + reduce(sum) で各顧客の合計を計算<br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ formatCurrency() で文字列に変換済みの FormattedCustomersTable[] を返す<br>
         &nbsp;&nbsp;→ &lt;CustomersTable customers={customers} /&gt; へ props として渡す
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       画面⑦ ログインページ /login
+       ===================================================================== -->
+  <div class="page-section" id="screen7">
+    <div class="page-header" onclick="toggleSection(this)" aria-expanded="true">
+      <span class="page-num">⑦</span>
+      <span>ログインページ</span>
+      <code class="url-label">/login</code>
+      <span class="section-arrow">▼</span>
+    </div>
+    <div class="page-body">
+      <div class="device-frame">
+
+        <!-- login/page.tsx [SC] -->
+        <div class="sc" style="min-height:480px; display:flex; align-items:center; justify-content:center; background:#f9fafb; padding:24px;">
+          <span class="component-label" data-path="src/app/(site)/login/page.tsx">login/page.tsx [SC]</span>
+
+          <!-- ロゴ帯 -->
+          <div style="width:100%; max-width:360px;">
+            <div style="background:#3b82f6; border-radius:8px; padding:12px 16px; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+              <div style="background:white; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-weight:900; color:#3b82f6; font-size:13px;">A</div>
+              <span style="color:white; font-weight:800; font-size:16px; letter-spacing:.05em;">ACME</span>
+            </div>
+
+            <!-- Suspense → LoginForm [CC] -->
+            <div class="cc" style="padding:16px; border-radius:8px; background:white;">
+              <span class="component-label" data-path="src/components/login/login-form.tsx">LoginForm [CC] — Suspense で包まれている</span>
+              <div style="font-size:11px; color:#64748b; margin-bottom:12px;">
+                useActionState(authenticate, undefined)<br>
+                useSearchParams() → callbackUrl
+              </div>
+
+              <p style="font-size:15px; font-weight:700; margin-bottom:16px;">Please log in to continue.</p>
+
+              <!-- Email -->
+              <label style="font-size:11px; font-weight:600; color:#111827; display:block; margin-bottom:4px;">Email</label>
+              <div style="position:relative; margin-bottom:12px;">
+                <span style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#9ca3af; font-size:13px;">@</span>
+                <input type="text" value="user@nextmail.com" readonly
+                  style="width:100%; border:1px solid #d1d5db; border-radius:6px; padding:8px 8px 8px 28px; font-size:13px; box-sizing:border-box; background:#fff;" />
+              </div>
+
+              <!-- Password -->
+              <label style="font-size:11px; font-weight:600; color:#111827; display:block; margin-bottom:4px;">Password</label>
+              <div style="position:relative; margin-bottom:16px;">
+                <span style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:#9ca3af; font-size:13px;">🔑</span>
+                <input type="password" value="123456" readonly
+                  style="width:100%; border:1px solid #d1d5db; border-radius:6px; padding:8px 8px 8px 28px; font-size:13px; box-sizing:border-box; background:#fff;" />
+              </div>
+
+              <!-- hidden redirectTo -->
+              <div style="font-size:10px; color:#94a3b8; margin-bottom:12px;">
+                <code>&lt;input type="hidden" name="redirectTo" value="/dashboard" /&gt;</code>
+              </div>
+
+              <!-- Submit button -->
+              <button class="btn btn-primary nav-btn" data-to="/dashboard"
+                onclick="navigateTo('screen2','/dashboard')"
+                style="width:100%; display:flex; align-items:center; justify-content:center; gap:8px; padding:10px;">
+                Log in &nbsp;→
+              </button>
+
+              <!-- Error area (aria-live) -->
+              <div style="height:28px; margin-top:8px; display:flex; align-items:flex-end; gap:4px; font-size:12px; color:#ef4444;">
+                <!-- 認証失敗時: Invalid credentials. が表示される -->
+                <span style="color:#d1d5db; font-style:italic;">← 認証エラー時はここにメッセージが表示される (aria-live)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="annotation">
+        <h4>コンポーネント構成</h4>
+        <ul>
+          <li><code>login/page.tsx [SC]</code> — ロゴ帯と <code>&lt;Suspense&gt;</code> を配置。<code>LoginForm</code> が <code>useSearchParams()</code> を使うため Suspense 必須</li>
+          <li><code>LoginForm [CC]</code> — <code>useActionState(authenticate, undefined)</code> でフォーム送信と状態管理。<code>useSearchParams()</code> でログイン後のリダイレクト先を取得</li>
+        </ul>
+      </div>
+
+      <div class="data-flow">
+        <h4>認証フロー</h4>
+        LoginForm [CC]<br>
+        &nbsp;&nbsp;→ &lt;form action={formAction}&gt; でフォーム送信<br>
+        &nbsp;&nbsp;→ <strong>authenticate()</strong> [Server Action] (<code>src/lib/actions/auth.ts</code>)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ signIn('credentials', formData) — nextauth.ts の Credentials.authorize() を呼ぶ<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ zod でバリデーション<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ getUser(email) — prisma.user.findUnique()<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ bcrypt.compare(password, user.password)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ 成功: user を return → NextAuth がセッション発行 → リダイレクト例外 throw → /dashboard へ遷移<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ 失敗: null を return → AuthError → authenticate が 'Invalid credentials.' を return<br>
+        &nbsp;&nbsp;→ errorMessage に反映 → UI にエラー表示 (aria-live で読み上げ)
       </div>
     </div>
   </div>

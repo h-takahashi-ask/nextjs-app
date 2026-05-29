@@ -17,6 +17,11 @@ import { prisma } from '@/lib/database/client';
 // 請求書一覧ページのURL。revalidatePath と redirect の両方で使うため定数化
 const redirectUrl = '/dashboard/invoices';
 
+// pg_advisory_xact_lock(classid int4, objid int4) の第1引数（ロック名前空間）
+// updateInvoice でのみ使用。同一請求書への並行更新（lost update）を防ぐ
+// トランザクション終了時に PostgreSQL が自動解放するため明示的な解放は不要
+const INVOICE_UPDATE_LOCK_CLASS = 1000 as const;
+
 /**
  * Server Action がフォームに返すバリデーション結果の型
  *
@@ -112,13 +117,16 @@ export async function createInvoice(prevState: State, formData: FormData) {
 
   // DB操作のみを try/catch でラップする
   try {
-    const invoice = {
-      data: { customerId, amount: amountInCents, status, date },
-    };
-    await prisma.invoice.create(invoice);
+    // $transaction: BEGIN → コールバック正常終了で COMMIT、例外発生で自動 ROLLBACK
+    await prisma.$transaction(async (tx) => {
+      const invoice = {
+        data: { customerId, amount: amountInCents, status, date },
+      };
+      await tx.invoice.create(invoice);
+    });
   } catch (error) {
-    // DB接続エラー・制約違反など、Prismaが投げるエラーをここで捕捉する
-    console.error('Database error (createInvoice):', error);
+    // $transaction のコールバックが例外をスローした時点で Prisma が ROLLBACK を発行済み
+    console.error('Transaction rolled back (createInvoice):', error);
     throw new Error('請求書の作成に失敗しました');
   }
 
@@ -177,19 +185,25 @@ export async function updateInvoice(
 
   // DB操作のみを try/catch でラップする
   try {
-    const invoice = {
-      // where: 更新対象のレコードをIDで特定する。createにはwhereは不要だがupdateでは必須
-      where: { id },
-      data: {
-        customerId,
-        amount: amountInCents,
-        status,
-        // date は意図的に含めない。作成日を上書きせず、最初に保存した日付を維持する
-      },
-    };
-    await prisma.invoice.update(invoice);
+    // $transaction: BEGIN → コールバック正常終了で COMMIT、例外発生で自動 ROLLBACK
+    await prisma.$transaction(async (tx) => {
+      // 同一請求書への並行更新を直列化する（lost update 防止）
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(${INVOICE_UPDATE_LOCK_CLASS}::int4, hashtext(${id}))`;
+      const invoice = {
+        // where: 更新対象のレコードをIDで特定する。createにはwhereは不要だがupdateでは必須
+        where: { id },
+        data: {
+          customerId,
+          amount: amountInCents,
+          status,
+          // date は意図的に含めない。作成日を上書きせず、最初に保存した日付を維持する
+        },
+      };
+      await tx.invoice.update(invoice);
+    });
   } catch (error) {
-    console.error('Database error (updateInvoice):', error);
+    // $transaction のコールバックが例外をスローした時点で Prisma が ROLLBACK を発行済み
+    console.error('Transaction rolled back (updateInvoice):', error);
     throw new Error('請求書の更新に失敗しました');
   }
 
@@ -214,11 +228,15 @@ export async function deleteInvoice(id: string) {
 
   // DB操作のみを try/catch でラップする
   try {
-    // 変数名を query にしているのは、関数名 deleteInvoice と同名にするとシャドウイングになるため
-    const query = { where: { id } };
-    await prisma.invoice.delete(query);
+    // $transaction: BEGIN → コールバック正常終了で COMMIT、例外発生で自動 ROLLBACK
+    await prisma.$transaction(async (tx) => {
+      // 変数名を query にしているのは、関数名 deleteInvoice と同名にするとシャドウイングになるため
+      const query = { where: { id } };
+      await tx.invoice.delete(query);
+    });
   } catch (error) {
-    console.error('Database error (deleteInvoice):', error);
+    // $transaction のコールバックが例外をスローした時点で Prisma が ROLLBACK を発行済み
+    console.error('Transaction rolled back (deleteInvoice):', error);
     throw new Error('請求書の削除に失敗しました');
   }
 
