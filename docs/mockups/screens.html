@@ -994,6 +994,11 @@
                 <td><span style="color:#3b82f6;font-weight:700;">SC</span></td>
                 <td><code>notFound()</code>が呼ばれた時に表示。HTTPステータス404を返す</td>
               </tr>
+              <tr>
+                <td><span class="file-badge">route.ts</span></td>
+                <td><span style="color:#059669;font-weight:700;">SC</span></td>
+                <td><code>GET</code> / <code>POST</code> 等のHTTPメソッド名でexportした関数がAPIエンドポイントになる。<code>app/</code>配下のどこにでも置ける (<code>app/api/</code>は慣習)</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -1005,6 +1010,9 @@
             <span class="nest-arrow">└── </span><span class="tree-dir">app/</span><br>
             <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-layout">layout.tsx</span><span class="tree-note">RootLayout — &lt;html&gt;&lt;body&gt; / 全ページ共通</span><br>
             <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-page">page.tsx</span><span class="tree-note">トップページ /</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-dir">api/</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── </span><span class="tree-dir">query/</span><br>
+            <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── </span><span style="color:#059669;font-weight:600;">route.ts</span><span class="tree-note">GET /api/query — DB接続確認用</span><br>
             <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;├── </span><span class="tree-dir">(site)/login/</span><br>
             <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── </span><span class="tree-page">page.tsx</span><span class="tree-note">/login — Suspense → LoginForm [CC]</span><br>
             <span class="nest-arrow">&nbsp;&nbsp;&nbsp;&nbsp;└── </span><span class="tree-dir">(site)/dashboard/</span><br>
