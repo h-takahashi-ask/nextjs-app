@@ -1,12 +1,13 @@
 /**
- * 【Next.jsキャッチアップ】【Frontend】【Lib】【ダッシュボードデータ】【概要】ダッシュボード表示に必要なデータをデータベースから取得するクエリ関数群
+ * 【Next.jsキャッチアップ】【Frontend】【Lib】【ダッシュボードデータ】【概要】ダッシュボード表示に必要なデータをデータベースから取得するクエリ関数群（Prisma版）
  * 【Next.jsキャッチアップ】【Frontend】【Lib】【ダッシュボードデータ】【概要】売上・請求書・顧客・カード集計の4種のデータを用途別に提供する
  *
- * 【Next.jsキャッチアップ】【Frontend】【Lib】【ダッシュボードデータ】【関連】src/lib/database/client.ts                   : Prismaクライアントの実装
- * 【Next.jsキャッチアップ】【Frontend】【Lib】【ダッシュボードデータ】【関連】src/lib/database/models.ts                   : DBエンティティ型定義
+ * 【Next.jsキャッチアップ】【Frontend】【Lib】【ダッシュボードデータ】【関連】src/lib/db/prisma/client.ts                   : Prismaクライアントの実装
+ * 【Next.jsキャッチアップ】【Frontend】【Lib】【ダッシュボードデータ】【関連】src/lib/db/prisma/models.ts                   : DBエンティティ型定義
  * 【Next.jsキャッチアップ】【Frontend】【Lib】【ダッシュボードデータ】【関連】src/lib/types.ts                              : UI表示・フォーム型定義
  * 【Next.jsキャッチアップ】【Frontend】【Lib】【ダッシュボードデータ】【関連】src/components/dashboard/revenue-chart.tsx  : fetchRevenueを使用
  * 【Next.jsキャッチアップ】【Frontend】【Lib】【ダッシュボードデータ】【関連】src/components/dashboard/cards.tsx          : fetchCardDataを使用
+ * 【Next.jsキャッチアップ】【Frontend】【Lib】【ダッシュボードデータ】【関連】src/lib/db/drizzle/queries.ts               : Drizzle版（同一インターフェース）
  */
 import { prismaClient } from '@/lib/db/prisma/client'
 import { Revenue, User } from '@/lib/db/prisma/models'
@@ -113,7 +114,7 @@ export async function fetchRevenue(): Promise<Revenue[]> {
  * @returns 金額を通貨フォーマット済みの最新請求書5件 (日付降順)
  */
 export async function fetchLatestInvoices(): Promise<LatestInvoice[]> {
-  
+
   console.log('Fetching latest invoices data...')
   await new Promise((resolve) => setTimeout(resolve, 2000))
 
@@ -183,7 +184,7 @@ export async function fetchCardData() {
         }),
         // SQL: SELECT SUM(amount) FROM invoices WHERE status = 'pending'
         prismaClient.invoice.aggregate({
-          _sum: { amount: true }, 
+          _sum: { amount: true },
           where: { status: 'pending' },
         }),
       ])
@@ -440,10 +441,10 @@ export async function getUser(email: string): Promise<User | null> {
   try {
     const user = await prismaClient.user.findUnique({
       where: { email },
-    });
+    })
     return user
   } catch (error) {
-    console.error('Failed to fetch user:', error);
-    throw new Error('Failed to fetch user.');
+    console.error('Failed to fetch user:', error)
+    throw new Error('Failed to fetch user.')
   }
 }
